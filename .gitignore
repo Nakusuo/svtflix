@@ -5,3 +5,6 @@ web/css/
 .DS_Store
 *.log
 __pycache__/
+# Copias generadas por tools/preparar.mjs
+web/datos/
+web/js/vendor/

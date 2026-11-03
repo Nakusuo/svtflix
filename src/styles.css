@@ -70,6 +70,63 @@
   }
 }
 
+@layer components {
+  /*
+    Top 13 (RF-13): número gigante en la capa de abajo y tarjeta encima tapando su lado derecho.
+    Tres columnas: [número solo][zona compartida][tarjeta]. El número ocupa 1-2 y la tarjeta 2-3,
+    así que se solapan exactamente en la columna 2 sin posiciones "a ojo".
+    --cifras (1 o 2) lo pone el JS según el número.
+  */
+  .top13 {
+    --tam: 9.5rem;
+    --tarjeta: 7.5rem;
+    --solape: calc(var(--tam) * 0.16);
+    display: grid;
+    flex-shrink: 0;
+    grid-template-columns: calc(var(--tam) * 0.62 * var(--cifras, 1) - var(--solape)) var(--solape) var(--tarjeta);
+    align-items: end;
+    padding-left: 0.25rem;
+  }
+  @media (min-width: 640px) {
+    .top13 {
+      --tam: 12.5rem;
+      --tarjeta: 9.5rem;
+    }
+  }
+  .top13-numero {
+    grid-column: 1 / 3;
+    grid-row: 1;
+    z-index: 1;
+    justify-self: end;
+    font-family: var(--font-display);
+    font-size: var(--tam);
+    line-height: 0.78;
+    letter-spacing: -0.04em;
+    color: var(--color-fondo);
+    -webkit-text-stroke: 3px #55535f;
+    paint-order: stroke;
+    transition: -webkit-text-stroke-color 0.3s;
+    user-select: none;
+  }
+  .top13:hover .top13-numero,
+  .top13:focus-visible .top13-numero {
+    -webkit-text-stroke-color: var(--color-rosa);
+  }
+  .top13-tarjeta {
+    grid-column: 2 / 4;
+    grid-row: 1;
+    z-index: 2;
+    position: relative;
+  }
+}
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
 @keyframes brillo {
   from {
     background-position: 150% 0;

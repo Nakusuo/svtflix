@@ -1,8 +1,10 @@
 /**
- * Arranque de SVTFLIX.
- * Fase 1: solo prepara la página. La carga de datos de Google Sheets llega en la Fase 2.
+ * Arranque de SVTFLIX: prepara la página, carga los datos y pinta la vista que pida la URL.
  */
 import { IMAGEN_RESERVA } from './config.js';
+import { cargarTodo } from './datos.js';
+import { pintarCatalogo, pintarCreditos, pintarPortada, pintarRedes, pintarTop13 } from './ui/inicio.js';
+import { vistaMiembro, vistaPagina } from './ui/vistas.js';
 
 /** Cambia por la imagen de reserva cualquier <img> que falle, una sola vez (RF-31). */
 function activarImagenesDeReserva() {
@@ -24,6 +26,7 @@ function activarCabeceraAlHacerScroll() {
   const actualizar = () => {
     cabecera.classList.toggle('bg-fondo/95', window.scrollY > 40);
     cabecera.classList.toggle('backdrop-blur', window.scrollY > 40);
+    cabecera.classList.toggle('shadow-lg', window.scrollY > 40);
   };
   window.addEventListener('scroll', actualizar, { passive: true });
   actualizar();
@@ -40,9 +43,44 @@ function pintarEsqueletos() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+/** Enrutador mínimo con el hash: #/miembro/<id> y #/pagina/<id>. Todo lo demás es el inicio. */
+function crearEnrutador(datos) {
+  const inicio = document.getElementById('contenido');
+  const detalle = document.getElementById('detalle');
+  let scrollInicio = 0;
+
+  return function enrutar() {
+    const [, tipo, id] = location.hash.match(/^#\/(miembro|pagina)\/([^/?#]+)/) || [];
+    if (tipo) {
+      if (!inicio.hidden) scrollInicio = window.scrollY;
+      const vista = tipo === 'miembro' ? vistaMiembro : vistaPagina;
+      detalle.replaceChildren(vista(datos, decodeURIComponent(id)));
+      inicio.hidden = true;
+      detalle.hidden = false;
+      window.scrollTo(0, 0);
+    } else if (inicio.hidden) {
+      detalle.hidden = true;
+      detalle.replaceChildren(); // detiene los videos de la vista anterior
+      inicio.hidden = false;
+      window.scrollTo(0, scrollInicio);
+    }
+  };
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('anio').textContent = new Date().getFullYear();
   activarImagenesDeReserva();
   activarCabeceraAlHacerScroll();
   pintarEsqueletos();
+
+  const datos = await cargarTodo();
+  pintarPortada(document.getElementById('portada'), datos.portada);
+  pintarTop13(document.getElementById('miembros'), datos.miembros);
+  pintarRedes(datos);
+  pintarCatalogo(document.getElementById('catalogo'), datos.enlaces);
+  pintarCreditos(document.getElementById('lista-creditos'), datos.creditos);
+
+  const enrutar = crearEnrutador(datos);
+  window.addEventListener('hashchange', enrutar);
+  enrutar();
 });

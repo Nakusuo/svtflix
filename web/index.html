@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Montserrat:wght@400;600;700&display=swap">
   <link rel="stylesheet" href="css/styles.css">
 
+  <script src="js/vendor/papaparse.min.js" defer></script>
   <script type="module" src="js/main.js"></script>
 </head>
 <body class="min-h-dvh">
@@ -40,7 +41,7 @@
 
   <main id="contenido">
     <!-- Portada / hero (RF-08 a RF-11) -->
-    <section id="portada" aria-label="Lanzamiento destacado" class="relative flex min-h-[70vh] items-end overflow-hidden px-4 pb-12 sm:min-h-[85vh] sm:px-10">
+    <section id="portada" aria-label="Lanzamiento destacado" class="relative isolate flex min-h-[70vh] items-end overflow-hidden px-4 pb-12 sm:min-h-[85vh] sm:px-10">
       <div class="esqueleto absolute inset-0 rounded-none" aria-hidden="true"></div>
       <div class="absolute inset-0 bg-gradient-to-t from-fondo via-fondo/40 to-transparent" aria-hidden="true"></div>
       <div class="relative max-w-xl">
@@ -50,7 +51,7 @@
     </section>
 
     <!-- Top 13 (RF-12 a RF-19) -->
-    <section id="miembros" aria-labelledby="titulo-miembros" class="px-4 py-8 sm:px-10">
+    <section id="miembros" aria-labelledby="titulo-miembros" class="relative z-10 -mt-16 px-4 py-8 sm:px-10">
       <h2 id="titulo-miembros" class="mb-4 font-display text-xl uppercase sm:text-2xl">Conoce a los 13 miembros</h2>
       <div class="flex gap-4 overflow-hidden" data-esqueleto="tarjetas-verticales"></div>
     </section>
@@ -67,7 +68,7 @@
     </section>
 
     <!-- Catálogo: las filas se crean desde la pestaña Enlaces (RF-21) -->
-    <div id="catalogo" aria-label="Catálogo de contenido" class="space-y-8 px-4 py-8 sm:px-10"></div>
+    <div id="catalogo" aria-label="Catálogo de contenido" class="space-y-6 py-8"></div>
 
     <!-- Sugerencias y preguntas (RF-27, RF-28). Se conecta en la Fase 5. -->
     <section id="sugerencias" aria-labelledby="titulo-sugerencias" class="px-4 py-12 sm:px-10">
@@ -75,6 +76,9 @@
       <p class="text-texto-suave">Muy pronto podrás dejarnos aquí tus comentarios, preguntas, reportes de links rotos o el contenido que quieres ver.</p>
     </section>
   </main>
+
+  <!-- Vistas de detalle: #/miembro/<id> y #/pagina/<id> (ui/vistas.js) -->
+  <main id="detalle" hidden></main>
 
   <!-- Créditos y aviso legal (RF-29, RF-30). El aviso va fijo en el HTML (CU-10, 2a). -->
   <footer class="border-t border-superficie-alta px-4 py-10 text-sm text-texto-suave sm:px-10">
