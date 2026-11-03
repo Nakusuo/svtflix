@@ -4,3 +4,4 @@ web/css/
 .vercel/
 .DS_Store
 *.log
+__pycache__/

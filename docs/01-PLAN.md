@@ -54,7 +54,7 @@ El contenido (portada, integrantes, videos, música, programas, redes y crédito
 
 ```mermaid
 flowchart LR
-  Admin([Admin de contenido]) -- edita --> Sheets[(Google Sheets<br/>7 pestañas)]
+  Admin([Admin de contenido]) -- edita --> Sheets[(Google Sheets<br/>9 pestañas)]
   Sheets -- "Publicar en la web<br/>(CSV)" --> CSV[/URLs CSV públicas/]
   Dev([Desarrollador]) -- git push --> GH[GitHub]
   GH -- despliegue automático --> Vercel[Vercel<br/>HTML · CSS · JS]
@@ -67,7 +67,7 @@ flowchart LR
 
 **Cómo funciona, en simple:**
 1. El visitante abre la web, y Vercel le entrega los archivos estáticos.
-2. El navegador del visitante pide en paralelo las 7 pestañas de la hoja (CSV público).
+2. El navegador del visitante pide en paralelo las 9 pestañas de la hoja (CSV público).
 3. El JavaScript convierte esas filas en secciones. Si una pestaña falla, el resto sigue funcionando.
 4. Los videos se ven con el reproductor incrustado de YouTube.
 5. Las sugerencias van a un Google Form, y las respuestas caen en otra hoja que solo ve el equipo.
@@ -98,7 +98,7 @@ SVTFLIX/
 │   ├── img/                    # logo, placeholder, favicon, fotos de integrantes
 │   └── js/
 │       ├── main.js             # arranque (DOMContentLoaded)
-│       ├── config.js           # URLs de las 7 pestañas CSV (único lugar)
+│       ├── config.js           # URLs de las 9 pestañas CSV (único lugar)
 │       ├── datos.js            # fetch + PapaParse + normalizar + caché
 │       ├── youtube.js          # extraer IDs, miniaturas, URLs de embed
 │       ├── seguro.js           # crear elementos sin innerHTML, validar URLs
@@ -126,9 +126,9 @@ Cada fase termina con una rama `release/*` → `main` y un tag. Vercel publica `
 
 | Fase | Objetivo | Entregables | HU incluidas | Hecho cuando… |
 |---|---|---|---|---|
-| **0. Contenido** | Pasar el contenido de Canva a la hoja | Hoja con las 7 pestañas, inventario de las listas de YouTube actuales, fotos de los 13 | HU-19 a HU-22, HU-24 | La hoja tiene todo lo que hoy muestra Canva y está publicada como CSV |
+| **0. Contenido** | Pasar el contenido de Canva a la hoja | Hoja con las 9 pestañas (contenido ya extraído de Canva en `contenido/`) | HU-19 a HU-22, HU-24 | La hoja tiene todo lo que hoy muestra Canva y está publicada como CSV |
 | **1. Entorno y CI/CD** | Repo y despliegue | Repo en GitHub, proyecto en Vercel, Tailwind compilando, `vercel.json` | HU-29 | Un push a `develop` genera una vista previa en Vercel |
-| **2. Motor de datos** | Leer y normalizar la hoja | `datos.js`, `youtube.js`, `seguro.js`, caché local | HU-23, HU-28 | La consola muestra las 7 pestañas ya normalizadas; si se corta la red, carga la última copia |
+| **2. Motor de datos** | Leer y normalizar la hoja | `datos.js`, `youtube.js`, `seguro.js`, caché local | HU-23, HU-28 | La consola muestra las 9 pestañas ya normalizadas; si se corta la red, carga la última copia |
 | **3. Maqueta y Top 13** | Esqueleto visual | Cabecera, hero, Top 13 con números, redes, filas del catálogo, pie | HU-01–05, HU-10, HU-14, HU-15, HU-17, HU-18, HU-25–27 | Se ve bien de 360 px a 1920 px y en 1366×768 |
 | **4. Interacción** | Modales y reproductor | Ficha de integrante, reproductor, filtros de música y programas | HU-06–08, HU-11, HU-12 | Se abre y cierra con ratón, táctil y teclado; un video que no se puede incrustar ofrece *Ver en YouTube* |
 | **5. Comunidad** | Formulario | Formulario de sugerencias conectado a Google Forms | HU-16 | Una respuesta de prueba llega a la hoja de respuestas |

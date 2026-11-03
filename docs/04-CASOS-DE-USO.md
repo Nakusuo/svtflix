@@ -55,14 +55,14 @@ flowchart LR
 | Campo | Detalle |
 |---|---|
 | **Actor principal** | Visitante (indirecto), sistema Google Sheets |
-| **Objetivo** | Tener en memoria las 7 pestañas normalizadas para pintar la web. |
-| **Precondiciones** | `config.js` tiene las 7 URLs CSV publicadas. |
+| **Objetivo** | Tener en memoria las 9 pestañas normalizadas para pintar la web. |
+| **Precondiciones** | `config.js` tiene las 9 URLs CSV publicadas. |
 | **Disparador** | Evento `DOMContentLoaded`. |
 | **RF / HU** | RF-01–06, RF-31 · HU-23, HU-26, HU-28 |
 
 **Flujo principal**
 1. El sistema pinta la estructura estática y los esqueletos.
-2. El sistema lanza 7 peticiones `fetch` en paralelo (`Promise.allSettled`).
+2. El sistema lanza 9 peticiones `fetch` en paralelo (`Promise.allSettled`).
 3. Por cada respuesta, PapaParse convierte el CSV en filas.
 4. El sistema normaliza los encabezados, quita las filas vacías e inactivas, valida las URLs y ordena.
 5. El sistema guarda una copia de cada pestaña válida en `localStorage` con su fecha.

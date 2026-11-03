@@ -23,5 +23,6 @@ Vercel compila con `npm run build` y publica la carpeta `web/` (ver `vercel.json
 3. [Historias de usuario](docs/03-HISTORIAS-DE-USUARIO.md): 30 HU con criterios de aceptación
 4. [Casos de uso](docs/04-CASOS-DE-USO.md): diagrama y 12 CU detallados
 5. [Especificación original](docs/00-especificacion-original.md): documento de partida
+6. [Contenido extraído de Canva](contenido/LEEME.md): los CSV para la hoja de Google Sheets y cómo se actualiza la web
 
 Sitio actual (Canva): https://svtflixesp.my.canva.site/

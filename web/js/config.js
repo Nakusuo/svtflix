@@ -15,6 +15,8 @@ export const HOJAS = {
   programas: '',
   redes: '',
   creditos: '',
+  paginas: '',
+  contenido: '',
 };
 
 /** Tiempo máximo de espera por pestaña antes de usar la copia guardada (CU-01, 2a). */

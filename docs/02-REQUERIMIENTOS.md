@@ -23,7 +23,7 @@
 ### Datos
 | ID | Requerimiento | Prio. |
 |---|---|---|
-| RF-01 | Al cargar la página (`DOMContentLoaded`), pedir **en paralelo** las 7 pestañas CSV definidas en `config.js`. | M |
+| RF-01 | Al cargar la página (`DOMContentLoaded`), pedir **en paralelo** las 9 pestañas CSV definidas en `config.js`. | M |
 | RF-02 | Normalizar los encabezados: sin tildes, sin mayúsculas, sin espacios extra y con espacios o guiones unificados en `_`. Así `"Título Álbum "`, `titulo_album` y `TITULO-ALBUM` son la misma columna. | M |
 | RF-03 | Descartar filas vacías y filas con `Activo = No`, y ordenar por la columna `Orden` cuando exista. | M |
 | RF-04 | Si una pestaña falla o llega vacía, mostrar el resto de secciones con normalidad y un mensaje amable solo en la sección afectada. | M |
@@ -114,21 +114,28 @@
 
 ## 5. Modelo de datos (Google Sheets)
 
-Una hoja con **7 pestañas**. Cada pestaña se publica como CSV en *Archivo → Compartir → Publicar en la web → [pestaña] → CSV*.
-Las columnas marcadas **(nuevo)** no estaban en la especificación original.
+Una hoja con **9 pestañas**. Cada pestaña se publica como CSV en *Archivo → Compartir → Publicar en la web → [pestaña] → CSV*.
+Las columnas marcadas **(nuevo)** no estaban en la especificación original. El contenido inicial, sacado del sitio de Canva, está en [`contenido/`](../contenido/LEEME.md).
+
+**Cómo se navega el contenido:** el inicio muestra filas (`Enlaces`). Cada tarjeta abre un video o lista de YouTube, o una **página interna** (`Paginas`) con su propio listado (`Contenido`), igual que hacía Canva con *Conciertos*, *Premiaciones* o *Variety*.
+
+**Columnas de imagen o video:** aceptan una ruta del propio sitio (`img/…`, `video/…`, lo que viene de Canva) o una URL `https://` cualquiera. Si `URL_Miniatura` está vacía y el enlace es un video de YouTube, se usa su miniatura automática.
 
 ### 5.1 `Portada`
 | Columna | Tipo | Oblig. | Ejemplo |
 |---|---|---|---|
 | Titulo_Album | Texto | Sí | DREAMSCAPE |
 | Subtitulo **(nuevo)** | Texto | No | JEONGHAN X JOSHUA 1st Mini Album |
-| URL_Logo **(nuevo)** | URL imagen PNG transparente | No | /img/portada/dreamscape-logo.png |
-| URL_Video_Teaser | URL YouTube | Sí | https://youtu.be/oyubak3kMFE |
-| URL_Poster **(nuevo)** | URL imagen 16:9 | Sí | /img/portada/dreamscape-poster.jpg |
+| URL_Logo **(nuevo)** | Imagen transparente | No | img/portada/logo-album.webp |
+| URL_Video_Teaser | URL YouTube | No | https://youtu.be/oyubak3kMFE |
+| URL_Video_Fondo **(nuevo)** | MP4 corto en bucle (preferido al teaser de YouTube) | No | video/portada/fondo.mp4 |
+| URL_Poster **(nuevo)** | Imagen 2:1 o 16:9 | Sí | img/portada/poster.webp |
 | URL_Boton_Principal **(nuevo)** | URL YouTube | Sí | https://youtu.be/hdwGWGSfABA |
 | Texto_Boton_Secundario | Texto | No | Nuevo Álbum |
-| URL_Boton_Secundario **(nuevo)** | URL | No | (lista o enlace del álbum) |
+| URL_Boton_Secundario **(nuevo)** | URL | No | https://www.youtube.com/playlist?list=… |
 | Activo **(nuevo)** | Sí/No | No | Sí |
+
+> El fondo del hero usa `URL_Video_Fondo` si existe. Un MP4 propio carga más rápido que el iframe de YouTube y no tiene problemas de autoplay en móvil. Si está vacío, se usa `URL_Video_Teaser`.
 
 ### 5.2 `Miembros`
 | Columna | Tipo | Oblig. | Ejemplo |
@@ -138,38 +145,39 @@ Las columnas marcadas **(nuevo)** no estaban en la especificación original.
 | Nombre | Texto | Sí | HOSHI |
 | Subunidad | Texto | Sí | Performance Team |
 | Rol **(nuevo)** | Texto | No | Líder |
-| URL_Foto | URL imagen 2:3 | Sí | /img/miembros/hoshi.jpg |
-| Foto_Fondo | URL imagen 16:9 | No | /img/miembros/hoshi-fondo.jpg |
+| URL_Foto | Imagen 2:3 | Sí | img/miembros/hoshi.webp |
+| Foto_Fondo | Imagen horizontal | No | img/miembros/hoshi-fondo.webp |
+| Video_Fondo **(nuevo)** | MP4 corto en bucle | No | video/miembros/hoshi.mp4 |
 | Biografia | Texto largo | No | … |
-| Nombre_Real | Texto | No | Kwon Soon-young |
-| Fecha_Nacimiento | Texto (DD/MM/AAAA) | No | 15/06/1996 |
-| Lugar_Nacimiento | Texto | No | Namyangju, Corea del Sur |
-| Estatura | Texto | No | 178 cm |
+| Nombre_Real | Texto | No | Kwon Soon Young / 권순영 |
+| Nombre_Coreano **(nuevo)** | Texto | No | (solo Jun y The8) |
+| Fecha_Nacimiento | Texto | No | 15-Junio-1996 |
+| Lugar_Nacimiento | Texto | No | Namyangju-si, Gyeonggi-do, Corea del Sur |
+| Estatura | Texto | No | 177 cm |
 | Signo | Texto | No | Géminis |
 | Emoji | Texto | No | 🐯 |
-| Instagram | URL | No | https://www.instagram.com/… |
+| Instagram | URL | No | https://www.instagram.com/ho5hi_kwon |
 
-### 5.3 `Enlaces` (catálogo)
+### 5.3 `Enlaces` (filas del inicio)
 | Columna | Tipo | Oblig. | Ejemplo |
 |---|---|---|---|
 | Categoria | Texto | Sí | Predebut |
 | Orden_Categoria **(nuevo)** | Entero | No | 2 |
 | Titulo | Texto | Sí | Seventeen TV |
-| URL_Video | URL YouTube (video **o lista**) | Sí | https://www.youtube.com/playlist?list=… |
-| URL_Miniatura | URL imagen 16:9 | No (sí para listas) | /img/catalogo/seventeen-tv.jpg |
-| Descripcion **(nuevo)** | Texto | No | "La mayoría no incluye subtítulos…" |
+| URL_Video | URL (video o lista de YouTube) | Sí, si no hay `Pagina` | https://www.youtube.com/playlist?list=… |
+| Pagina **(nuevo)** | ID de una fila de `Paginas` | Sí, si no hay `URL_Video` | conciertos |
+| URL_Miniatura | Imagen 16:9 | No (sí para listas y páginas) | img/catalogo/seventeen-tv.webp |
 | Orden **(nuevo)** | Entero | No | 1 |
 | Activo **(nuevo)** | Sí/No | No | Sí |
-
-Categorías actuales en Canva (para migrar): **Música** (Videos Musicales, Dance Practice, Fanchats, Special Video…), **Predebut** (Seventeen TV, Pre-Debut Film, Good Morning 17, 17 Project), **Contenido Diverso** (Detrás de Cámaras, Entretenimiento, Variety, Japón…), **Going Seventeen** (GOSE 2017, 2018 Spin Off, 2019, 2020…), **Proyecciones** (Conciertos, Caratland, FanMeetings Japón, Documentales y Películas…). Las filas con flecha tienen más elementos que hay que inventariar en la Fase 0.
 
 ### 5.4 `Musica` y 5.5 `Programas`
 | Columna | Tipo | Oblig. | Ejemplo |
 |---|---|---|---|
-| Miembro | ID o nombre del integrante | Sí | hoshi |
-| Titulo | Texto | Sí | Spider |
-| URL_Video | URL YouTube | Sí | https://youtu.be/… |
-| URL_Miniatura **(nuevo)** | URL | No | — |
+| Miembro | ID del integrante | Sí | hoshi |
+| Titulo | Texto | Sí | Knight Magazine |
+| URL_Video | URL | Sí | https://www.youtube.com/playlist?list=… |
+| Plataforma **(nuevo)** | YouTube / Google Docs / Bilibili / OK.ru / Dailymotion / Otro | No | YouTube |
+| URL_Miniatura **(nuevo)** | Imagen 16:9 | No | img/miembros/hoshi/knight-magazine.webp |
 | Orden **(nuevo)** | Entero | No | 1 |
 
 ### 5.6 `Redes` **(nueva pestaña)**
@@ -177,8 +185,8 @@ Categorías actuales en Canva (para migrar): **Música** (Videos Musicales, Danc
 |---|---|---|---|
 | Seccion | `Cabecera` / `Sigue` / `Escucha` | Sí | Sigue |
 | Nombre | Texto | Sí | Instagram |
-| URL | URL | Sí | https://www.instagram.com/saythename_17/ |
-| Icono | clave de icono (`x`, `instagram`, `youtube`, `web`, `weverse`, `tiktok`, `spotify`, `apple-music`, `youtube-music`) o URL de imagen | Sí | instagram |
+| URL | URL | Sí | https://www.instagram.com/saythename_17 |
+| Icono | clave de icono (`x`, `instagram`, `youtube`, `web`, `weverse`, `tiktok`, `facebook`, `sound-cloud`, `spotify`, `apple-music`, `youtube-music`) | Sí | instagram |
 | Orden | Entero | No | 2 |
 
 ### 5.7 `Creditos` **(nueva pestaña)**
@@ -188,6 +196,26 @@ Categorías actuales en Canva (para migrar): **Música** (Videos Musicales, Danc
 | URL | URL | No | — |
 | Tipo | `Creadora` / `Diseño` / `Subtítulos` / `Otros` | No | Subtítulos |
 | Orden | Entero | No | — |
+
+### 5.8 `Paginas` **(nueva pestaña)**: páginas internas tipo *Conciertos* o *Variety*
+| Columna | Tipo | Oblig. | Ejemplo |
+|---|---|---|---|
+| Pagina | ID corto, sin espacios (va en la URL: `#/pagina/conciertos`) | Sí | conciertos |
+| Titulo | Texto | Sí | Conciertos |
+| Descripcion | Texto | No | Vive la experiencia de Seventeen en sus conciertos… |
+| URL_Portada | Imagen horizontal | No | img/paginas/conciertos/portada.webp |
+
+### 5.9 `Contenido` **(nueva pestaña)**: lo que hay dentro de cada página interna
+| Columna | Tipo | Oblig. | Ejemplo |
+|---|---|---|---|
+| Pagina | ID de `Paginas` | Sí | conciertos |
+| Seccion | Texto (agrupa dentro de la página: año, premiación…) | No | 2019 |
+| Titulo | Texto | Sí | 2019 'Ode To You' en Seúl |
+| URL_Video | URL | Sí | https://docs.google.com/document/d/… |
+| Plataforma | igual que en `Musica` | No | Google Docs |
+| URL_Miniatura | Imagen 16:9 | No | img/paginas/conciertos/2019-ode-to-you-en-seul.webp |
+| Orden | Entero | No | 3 |
+| Activo | Sí/No | No | Sí |
 
 ## 6. Trazabilidad
 

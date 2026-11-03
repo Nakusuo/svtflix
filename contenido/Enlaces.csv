@@ -1,0 +1,41 @@
+Categoria,Orden_Categoria,Titulo,URL_Video,Pagina,URL_Miniatura,Orden,Activo
+Música,1,Videos Musicales,https://www.youtube.com/playlist?list=PLJjsHECTGO7Nn3tXuhkbeju4v4FVT6r-6,,img/catalogo/videos-musicales.webp,1,Sí
+Música,1,Dance Practice,https://www.youtube.com/playlist?list=PLJjsHECTGO7PaQiz6k3qX1vqq3XVXWgwO,,img/catalogo/dance-practice.webp,2,Sí
+Música,1,Fanchats,https://www.youtube.com/playlist?list=PLJjsHECTGO7OtXgGSGXgctG1gKAA42S46,,img/catalogo/fanchats.webp,3,Sí
+Música,1,Special Video,https://www.youtube.com/playlist?list=PLJjsHECTGO7NROFh4KVJRRK6Qh1kBTVzc,,img/catalogo/special-video.webp,4,Sí
+Música,1,Presentaciones,,presentaciones,img/catalogo/presentaciones.webp,5,Sí
+Música,1,Presentaciones USA,https://www.youtube.com/playlist?list=PLJjsHECTGO7NVEtweODZIHpbj5pAHLsRi,,img/catalogo/presentaciones-usa.webp,6,Sí
+Música,1,Premiaciones,,premiaciones,img/catalogo/premiaciones.webp,7,Sí
+Música,1,Festivales,,festivales-y-shows,img/catalogo/festivales.webp,8,Sí
+Música,1,Covers,https://www.youtube.com/playlist?list=PLJjsHECTGO7N_Xrq_dMVuP69LjfV0Ldmo,,img/catalogo/covers.webp,9,Sí
+Música,1,#17Studio,https://www.youtube.com/playlist?list=PLJjsHECTGO7M_lGuoboWc-tZfG_JJBhLC,,img/catalogo/17studio.webp,10,Sí
+Música,1,OSTs,https://www.youtube.com/playlist?list=PLJjsHECTGO7NVaxP29gMvYdHocvPkvOTm,,img/catalogo/osts.webp,11,Sí
+Música,1,Relay,https://www.youtube.com/playlist?list=PLJjsHECTGO7MjZAlGeRmw9HossyL9WSFL,,img/catalogo/relay.webp,12,Sí
+Música,1,Part Switch,https://www.youtube.com/playlist?list=PLJjsHECTGO7My8Gh_rATocq4bZBoaW2Um,,img/catalogo/part-switch.webp,13,Sí
+Música,1,Showcases,https://www.youtube.com/playlist?list=PLJjsHECTGO7P9v-TlBLCEUUbNP4dRdPZe,,img/catalogo/showcases.webp,14,Sí
+Predebut,2,Seventeen TV,https://www.youtube.com/playlist?list=PLJjsHECTGO7Nj2pbGIRU9K7nm_eHEsCAF,,img/catalogo/seventeen-tv.webp,1,Sí
+Predebut,2,Pre-Debut Film,https://www.youtube.com/playlist?list=PLJjsHECTGO7PqFYyr-69KjWOQGOZGinZz,,img/catalogo/pre-debut-film.webp,2,Sí
+Predebut,2,Good Morning 17,https://www.youtube.com/playlist?list=PLJjsHECTGO7OBUt9zUqBH36UyUNrSsixm,,img/catalogo/good-morning-17.webp,3,Sí
+Predebut,2,17 Project,https://www.youtube.com/playlist?list=PLvZyIG4oGwk7iKXczgPc_HujVSL7weAK8,,img/catalogo/17-project.webp,4,Sí
+Contenido Diverso,3,Detrás de Cámaras,,detras-de-camaras,img/catalogo/detras-de-camaras.webp,1,Sí
+Contenido Diverso,3,Entretenimiento,,entretenimiento,img/catalogo/entretenimiento.webp,2,Sí
+Contenido Diverso,3,Variety,,variety,img/catalogo/variety.webp,3,Sí
+Contenido Diverso,3,Japón,,japon,img/catalogo/japon.webp,4,Sí
+Contenido Diverso,3,Reality,,reality,img/catalogo/reality.webp,5,Sí
+Contenido Diverso,3,Entrevistas,,entrevistas,img/catalogo/entrevistas.webp,6,Sí
+Contenido Diverso,3,Extras,,extras,img/catalogo/extras.webp,7,Sí
+Going Seventeen,4,GOSE 2017,https://www.youtube.com/playlist?list=PLJjsHECTGO7NJDIcpzk7GpGE3c7XYJTHy,,img/catalogo/gose-2017.webp,1,Sí
+Going Seventeen,4,GOSE 2018 - Spin Off,https://www.youtube.com/playlist?list=PLJjsHECTGO7MaLQc3TOA2_rwIRfkpuCH8,,img/catalogo/gose-2018-spin-off.webp,2,Sí
+Going Seventeen,4,GOSE 2019,https://www.youtube.com/playlist?list=PLJjsHECTGO7Mq_xyUV0zmdufsw2mpJ481,,img/catalogo/gose-2019.webp,3,Sí
+Going Seventeen,4,GOSE 2020,https://www.youtube.com/playlist?list=PLJjsHECTGO7NmgMMA3z8h5fGB3a4CQZ_-,,img/catalogo/gose-2020.webp,4,Sí
+Going Seventeen,4,GOSE 2021,https://www.youtube.com/playlist?list=PLJjsHECTGO7OTvFfP6Ev5y3z8qsglXAG5,,img/catalogo/gose-2021.webp,5,Sí
+Going Seventeen,4,GOSE 2022,https://www.youtube.com/playlist?list=PLJjsHECTGO7PGY66h6gji891L8CYO2UJu,,img/catalogo/gose-2022.webp,6,Sí
+Going Seventeen,4,GOSE 2023,https://www.youtube.com/playlist?list=PLJjsHECTGO7P7_7O_N5tjnr3xYvEJBsJs,,img/catalogo/gose-2023.webp,7,Sí
+Going Seventeen,4,GOSE 2024,https://www.youtube.com/playlist?list=PLJjsHECTGO7MwTu6b266lpW6CAvZVVwJh,,img/catalogo/gose-2024.webp,8,Sí
+Going Seventeen,4,GOSE 2025,https://www.youtube.com/playlist?list=PLJjsHECTGO7PopM-JKa0j0hbak8sOuS0c,,img/catalogo/gose-2025.webp,9,Sí
+Going Seventeen,4,GOSE 2026,https://www.youtube.com/playlist?list=PLJjsHECTGO7PyYTf3MXDqvB3zwa_dBfqz,,img/catalogo/gose-2026.webp,10,Sí
+Proyecciones,5,Conciertos,,conciertos,img/catalogo/conciertos.webp,1,Sí
+Proyecciones,5,Caratland,,caratland,img/catalogo/caratland.webp,2,Sí
+Proyecciones,5,FanMeetings Japón,,fanmeetings-jp,img/catalogo/fanmeetings-japon.webp,3,Sí
+Proyecciones,5,Documentales y Películas,,documentales-y-pel-culas,img/catalogo/documentales-y-peliculas.webp,4,Sí
+Proyecciones,5,Season’s Greetings,,season-s-greetings,img/catalogo/seasons-greetings.webp,5,Sí
