@@ -78,3 +78,21 @@ python3 tools/canva/descargar.py /tmp/canva-html     # guarda el HTML de las 29 
 python3 tools/canva/importar.py /tmp/canva-html --imagenes
 ```
 Las imágenes que ya existen no se vuelven a descargar.
+
+## Índice de canciones para el buscador (`videos.json`)
+
+En la hoja casi todo son **listas** de YouTube ("Videos Musicales", "GOSE 2019"…). Para poder buscar una canción o un
+episodio concreto, `videos.json` guarda los títulos de los **videos que hay dentro de cada lista**:
+6384 videos de 446 listas (2026-11-02).
+
+- La web lo descarga solo la primera vez que alguien abre el buscador (~250 KB).
+- Los MV con título solo en coreano llevan además su nombre en inglés ("음악의 신" → "God of Music") para poder buscarlos.
+  La lista de traducciones está en `ALIAS`, dentro de `tools/indice_videos.py`, y se puede ampliar.
+- **No hace falta tener el ordenador encendido** para que funcione: el archivo se sube con la web.
+  Solo para **añadir videos nuevos** (por ejemplo, tras un comeback) hay que regenerarlo y subirlo:
+
+```bash
+python3 tools/indice_videos.py     # necesita yt-dlp; tarda unos 10 minutos
+```
+
+Lista que ya no existe en YouTube (revisar en la hoja): **Entretenimiento · Boys Be Diary**.

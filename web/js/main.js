@@ -93,5 +93,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const enrutar = crearEnrutador(datos);
   window.addEventListener('hashchange', enrutar);
   activarBuscador(enrutar);
+  // Cuando llega el índice de canciones, se refrescan los resultados si estás buscando
+  document.addEventListener('svtflix:indice-videos', () => location.hash.startsWith('#/buscar/') && enrutar());
   enrutar();
 });

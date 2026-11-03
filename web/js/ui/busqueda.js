@@ -1,7 +1,7 @@
 /**
  * Buscador: el campo de la cabecera y la vista de resultados (#/buscar/<texto>).
  */
-import { buscar } from '../buscar.js';
+import { buscar, prepararVideos } from '../buscar.js';
 import { el, urlSegura } from '../seguro.js';
 import { tarjeta } from './comunes.js';
 
@@ -29,6 +29,7 @@ const rejilla = (items) => el('div', { class: 'grid grid-cols-2 gap-2 sm:grid-co
   items.map((i) => tarjeta(i, { ancho: 'w-full' })));
 
 export function vistaBusqueda(consulta) {
+  prepararVideos();
   const r = buscar(consulta);
   const cabecera = el('header', { class: 'px-4 pb-2 pt-24 sm:px-10 sm:pt-28' },
     el('p', { class: 'text-sm text-texto-suave', texto: r.total === 1 ? '1 resultado para' : `${r.total} resultados para` }),
@@ -62,6 +63,7 @@ export function activarBuscador(enrutar) {
   if (!boton || !campo) return;
 
   const abrir = () => {
+    prepararVideos(); // empieza a bajar el índice de canciones mientras escribes
     cabecera.toggleAttribute('data-buscando', true);
     boton.setAttribute('aria-expanded', 'true');
     campo.focus();
