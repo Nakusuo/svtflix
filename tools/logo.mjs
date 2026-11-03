@@ -84,6 +84,9 @@ function svg(comandos, { margen = 2, titulo }) {
 const logo = curvar(trazar('SVTFLIX', 200, -1));
 writeFileSync('web/img/logo-svtflix.svg', svg(logo, { titulo: 'SVTFLIX' }));
 
+// La "S" sola (va en la esquina de la portada en el móvil, como la "N" de Netflix)
+writeFileSync('web/img/logo-s.svg', svg(trazar('S', 200, 0), { titulo: 'S' }));
+
 // Icono de la pestaña: una S sobre negro
 const s = trazar('S', 200, 0);
 const { x0, x1, y0, y1 } = limites(s);

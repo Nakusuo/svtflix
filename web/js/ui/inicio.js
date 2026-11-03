@@ -21,7 +21,13 @@ export function pintarPortada(contenedor, filas) {
   const principal = urlSegura(p.url_boton_principal);
   const secundario = urlSegura(p.url_boton_secundario);
 
-  const fondo = el('div', { class: 'absolute inset-0 -z-10' },
+  /*
+    Un solo bloque de imagen/video que cambia de sitio según la pantalla:
+    - Móvil: dentro de una tarjeta redondeada, arriba y en formato 16:10 (como la portada de Netflix en el móvil).
+    - Escritorio (sm+): ocupa toda la portada detrás del texto.
+  */
+  // En móvil el borde inferior se desvanece con una máscara (sin corte) sobre el fondo de ambiente.
+  const medio = el('div', { class: 'relative aspect-[16/10] overflow-hidden [mask-image:linear-gradient(to_bottom,#000_55%,transparent)] sm:absolute sm:inset-0 sm:-z-10 sm:aspect-auto sm:[mask-image:none]' },
     poster && el('img', { src: poster, alt: '', class: 'absolute inset-0 h-full w-full object-cover', fetchpriority: 'high' }));
 
   // El video entra después del póster y solo si el usuario no pidió reducir movimiento (RF-09).
@@ -32,30 +38,47 @@ export function pintarPortada(contenedor, filas) {
     });
     v.muted = true; // necesario para que el navegador permita el autoplay
     v.addEventListener('playing', () => v.classList.remove('opacity-0'), { once: true });
-    fondo.append(v);
+    medio.append(v);
   }
+  medio.append(
+    // Móvil: la "S" arriba a la izquierda, como la "N" de Netflix
+    el('img', { src: 'img/logo-s.svg', alt: '', width: 40, height: 70, class: 'absolute left-3 top-3 h-7 w-auto drop-shadow-[0_2px_6px_rgba(0,0,0,.7)] sm:hidden' }),
+  );
+
+  const botones = el('div', { class: 'mt-4 grid w-full grid-cols-2 gap-2 sm:mt-0 sm:flex sm:w-auto sm:gap-3' },
+    principal && el('a', {
+      href: principal, target: '_blank', rel: 'noopener',
+      class: 'inline-flex min-h-12 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-texto px-4 font-bold text-fondo shadow-xl shadow-black/40 transition hover:bg-white hover:shadow-rosa/20 active:scale-95 sm:px-6',
+    }, icono('play', 'size-5'), 'Reproducir'),
+    secundario && p.texto_boton_secundario && el('a', {
+      href: secundario, target: '_blank', rel: 'noopener',
+      class: 'inline-flex min-h-12 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-white/15 px-4 font-bold text-texto ring-1 ring-white/20 backdrop-blur transition hover:bg-white/25 active:scale-95 sm:px-6',
+      texto: p.texto_boton_secundario,
+    }));
+  // Si solo hay un botón, que ocupe todo el ancho en el móvil
+  if (botones.children.length === 1) botones.firstElementChild.classList.add('col-span-2');
+
+  const texto = el('div', { class: 'relative -mt-16 flex flex-col items-center px-4 pb-4 text-center animate-[aparecer_.8s_ease-out_both] sm:mt-0 sm:max-w-md sm:items-start sm:px-0 sm:pb-0 sm:text-left' },
+    el('p', { class: 'mb-2 hidden text-xs font-bold uppercase tracking-[0.35em] text-rosa sm:block', texto: 'Nuevo lanzamiento' }),
+    logo
+      ? el('img', { src: logo, alt: p.titulo_album, width: 526, height: 526, class: 'mb-1 w-32 drop-shadow-[0_4px_24px_rgba(0,0,0,.7)] sm:mb-3 sm:w-56' })
+      : el('h1', { class: 'mb-2 font-display text-5xl uppercase sm:text-6xl', texto: p.titulo_album }),
+    logo && el('h1', { class: 'sr-only', texto: p.titulo_album }),
+    // Móvil: etiqueta roja como el "Recién agregado" de Netflix
+    el('span', { class: 'mb-2 rounded-sm bg-acento px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-white shadow-md shadow-black/40 sm:hidden', texto: 'Nuevo lanzamiento' }),
+    p.subtitulo && el('p', { class: 'text-[0.8rem] font-semibold text-texto/85 sm:mb-6 sm:text-sm sm:uppercase sm:tracking-widest', texto: p.subtitulo }),
+    botones);
 
   contenedor.replaceChildren(
-    fondo,
-    el('div', { class: 'absolute inset-0 -z-10 bg-gradient-to-r from-fondo/90 via-fondo/30 to-transparent', 'aria-hidden': 'true' }),
-    el('div', { class: 'absolute inset-0 -z-10 bg-gradient-to-t from-fondo via-transparent to-fondo/40', 'aria-hidden': 'true' }),
-    el('div', { class: 'relative mx-auto flex w-full max-w-sm flex-col items-center text-center animate-[aparecer_.8s_ease-out_both] sm:mx-0 sm:max-w-md sm:items-start sm:text-left' },
-      el('p', { class: 'mb-2 text-[0.65rem] font-bold uppercase tracking-[0.35em] text-rosa sm:mb-3 sm:text-xs', texto: 'Nuevo lanzamiento' }),
-      logo
-        ? el('img', { src: logo, alt: p.titulo_album, width: 526, height: 526, class: 'mb-2 w-36 drop-shadow-[0_4px_24px_rgba(0,0,0,.6)] sm:mb-3 sm:w-56' })
-        : el('h1', { class: 'mb-2 font-display text-5xl uppercase sm:text-6xl', texto: p.titulo_album }),
-      logo && el('h1', { class: 'sr-only', texto: p.titulo_album }),
-      p.subtitulo && el('p', { class: 'mb-5 text-xs font-semibold uppercase tracking-widest text-texto/80 sm:mb-6 sm:text-sm', texto: p.subtitulo }),
-      el('div', { class: 'flex w-full gap-3 sm:w-auto [&>*]:flex-1 sm:[&>*]:flex-none' },
-        principal && el('a', {
-          href: principal, target: '_blank', rel: 'noopener',
-          class: 'inline-flex min-h-12 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-texto px-4 sm:px-6 font-bold text-fondo shadow-xl shadow-black/40 transition hover:bg-white hover:shadow-rosa/20 active:scale-95',
-        }, icono('play', 'size-5'), 'Reproducir'),
-        secundario && p.texto_boton_secundario && el('a', {
-          href: secundario, target: '_blank', rel: 'noopener',
-          class: 'inline-flex min-h-12 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-white/15 px-4 sm:px-6 font-bold text-texto ring-1 ring-white/20 backdrop-blur transition hover:bg-white/25 active:scale-95',
-          texto: p.texto_boton_secundario,
-        }))),
+    // Tarjeta (solo en móvil; en escritorio sus estilos desaparecen y todo queda a pantalla completa)
+    el('div', { class: 'relative isolate overflow-hidden rounded-xl bg-superficie shadow-2xl shadow-black/60 ring-1 ring-white/10 sm:static sm:isolation-auto sm:overflow-visible sm:rounded-none sm:bg-transparent sm:shadow-none sm:ring-0' },
+      // Móvil: fondo de ambiente con el póster difuminado
+      poster && el('img', { src: poster, alt: '', 'aria-hidden': 'true', class: 'absolute inset-0 -z-10 h-full w-full scale-125 object-cover opacity-35 blur-2xl saturate-150 sm:hidden' }),
+      medio,
+      texto),
+    // Escritorio: degradados para que el texto se lea sobre el video
+    el('div', { class: 'absolute inset-0 -z-10 hidden bg-gradient-to-r from-fondo/90 via-fondo/30 to-transparent sm:block', 'aria-hidden': 'true' }),
+    el('div', { class: 'absolute inset-0 -z-10 hidden bg-gradient-to-t from-fondo via-transparent to-fondo/40 sm:block', 'aria-hidden': 'true' }),
   );
 }
 
@@ -90,7 +113,7 @@ export function pintarTop13(contenedor, miembros) {
   const ordenados = [...miembros].sort((a, b) => Number(a.numero) - Number(b.numero));
   const seccion = fila('Conoce a los 13 miembros', ordenados, tarjetaTop, 'titulo-miembros');
   // Se monta un poco sobre el final de la portada, como en las apps de streaming.
-  seccion.classList.add('relative', 'z-10', '-mt-14', 'sm:-mt-16');
+  seccion.classList.add('relative', 'z-10', 'sm:-mt-16');
   contenedor.replaceWith(Object.assign(seccion, { id: 'miembros' }));
 }
 
