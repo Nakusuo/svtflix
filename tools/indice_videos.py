@@ -24,6 +24,8 @@ import yt_dlp
 RAIZ = pathlib.Path(__file__).resolve().parents[1]
 CONTENIDO = RAIZ / 'contenido'
 SALIDA = CONTENIDO / 'videos.json'
+SALIDA_LISTAS = CONTENIDO / 'listas.json'  # primeros videos de cada lista, para las vistas previas
+VIDEOS_POR_LISTA = 6
 MAXIMO = int(sys.argv[sys.argv.index('--max') + 1]) if '--max' in sys.argv else None
 
 # Muchos MV tienen el título solo en coreano. Para poder buscarlos por su nombre conocido,
@@ -72,14 +74,17 @@ def videos_de(lista_id):
 def main():
     listas = listas_del_contenido()[:MAXIMO]
     print(f'Listas a leer: {len(listas)}')
-    videos, fallidas = {}, []
+    videos, fallidas, por_lista = {}, [], {}
     with cf.ThreadPoolExecutor(4) as ex:
         futuros = {ex.submit(videos_de, lid): (lid, etiqueta) for lid, etiqueta in listas}
         for n, fu in enumerate(cf.as_completed(futuros), 1):
             lid, etiqueta = futuros[fu]
             try:
-                for vid, titulo in fu.result():
-                    if titulo in IGNORAR or vid in videos:
+                entradas = [(vid, titulo) for vid, titulo in fu.result() if titulo not in IGNORAR]
+                if entradas:
+                    por_lista[lid] = [vid for vid, _ in entradas[:VIDEOS_POR_LISTA]]
+                for vid, titulo in entradas:
+                    if vid in videos:
                         continue
                     alias = next((ing for kor, ing in ALIAS.items() if kor in titulo), '')
                     videos[vid] = {'id': vid, 'titulo': titulo, 'lista': etiqueta, **({'alias': alias} if alias else {})}
@@ -93,6 +98,7 @@ def main():
         'listas': len(listas) - len(fallidas),
         'videos': list(videos.values()),
     }, ensure_ascii=False, separators=(',', ':')), encoding='utf-8')
+    SALIDA_LISTAS.write_text(json.dumps(por_lista, separators=(',', ':')), encoding='utf-8')
     print(f'Listo: {len(videos)} videos de {len(listas) - len(fallidas)} listas → {SALIDA.relative_to(RAIZ)}')
     if fallidas:
         print(f'Listas que no se pudieron leer ({len(fallidas)}):')

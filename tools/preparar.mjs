@@ -6,8 +6,8 @@ import { cpSync, mkdirSync, readdirSync } from 'node:fs';
 
 mkdirSync('web/datos', { recursive: true });
 for (const archivo of readdirSync('contenido')) {
-  // Las pestañas (.csv) y el índice de canciones para el buscador (videos.json)
-  if (archivo.endsWith('.csv') || archivo === 'videos.json') cpSync(`contenido/${archivo}`, `web/datos/${archivo}`);
+  // Las pestañas (.csv) y el índice de canciones para el buscador (videos.json) y los videos de cada lista para las vistas previas (listas.json)
+  if (archivo.endsWith('.csv') || archivo === 'videos.json' || archivo === 'listas.json') cpSync(`contenido/${archivo}`, `web/datos/${archivo}`);
 }
 
 mkdirSync('web/js/vendor', { recursive: true });

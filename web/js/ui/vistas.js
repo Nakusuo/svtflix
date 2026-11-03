@@ -51,12 +51,13 @@ export function vistaMiembro(datos, id) {
     cabecera({
       imagen: urlSegura(m.foto_fondo),
       video: urlSegura(m.video_fondo),
-      contenido: el('div', { class: 'grid grid-cols-[6.5rem_1fr] items-end gap-x-4 gap-y-4 sm:flex sm:gap-8' },
+      contenido: el('div', { class: 'grid grid-cols-[6.5rem_minmax(0,1fr)] items-end gap-x-4 gap-y-4 sm:flex sm:gap-8' },
         el('img', { src: urlSegura(m.url_foto), alt: `Foto de ${m.nombre}`, width: 600, height: 889, class: 'w-full shrink-0 rounded-md shadow-2xl shadow-black/70 ring-1 ring-white/15 sm:w-48' }),
         el('div', { class: 'contents max-w-2xl sm:block' },
-          el('div', { class: 'self-end' },
+          el('div', { class: 'min-w-0 self-end' },
             el('p', { class: 'mb-1 text-[0.65rem] font-bold uppercase tracking-[0.3em] text-rosa sm:text-xs', texto: [m.rol, m.subunidad].filter(Boolean).join(' · ') }),
-            el('h1', { class: 'font-display text-[2.6rem] uppercase leading-none sm:mb-3 sm:text-7xl' }, m.nombre),
+            // El tamaño se adapta al ancho para que nombres largos (SEUNGKWAN) quepan en una línea
+            el('h1', { class: 'font-display text-[clamp(1.2rem,6.6vw,2.6rem)] uppercase leading-none [overflow-wrap:anywhere] sm:mb-3 sm:text-7xl' }, m.nombre),
             m.emoji && el('p', { class: 'mt-1 text-2xl sm:text-3xl', texto: m.emoji })),
           el('div', { class: 'col-span-2' },
             m.biografia && el('p', { class: 'mb-4 text-[0.95rem] leading-relaxed text-texto/90 sm:text-base', texto: m.biografia }),
