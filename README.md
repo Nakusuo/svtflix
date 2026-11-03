@@ -12,7 +12,8 @@ npm run dev   # abre http://localhost:5500
 ```
 
 ## Despliegue
-Vercel compila con `npm run build` y publica la carpeta `web/` (ver `vercel.json`).
+- **Vista previa (provisional):** GitHub Pages → https://nakusuo.github.io/svtflix/ . Se publica sola con cada push a `develop` (`.github/workflows/pages.yml`).
+- **Definitivo:** Vercel compila con `npm run build` y publica la carpeta `web/` (ver `vercel.json`).
 
 ## Ramas
 `feature/*` → `develop` → `release/x.y.z` → `main` (con tag). Commits en español.
