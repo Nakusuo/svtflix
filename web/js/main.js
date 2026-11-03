@@ -3,7 +3,8 @@
  */
 import { IMAGEN_RESERVA } from './config.js';
 import { cargarTodo } from './datos.js';
-import { pintarCatalogo, pintarCreditos, pintarPortada, pintarRedes, pintarTop13 } from './ui/inicio.js';
+import { pintarCatalogo, pintarCreditos, pintarNavegacion, pintarPortada, pintarRedes, pintarTop13 } from './ui/inicio.js';
+import { activarVistaPrevia } from './ui/vista-previa.js';
 import { vistaMiembro, vistaPagina } from './ui/vistas.js';
 
 /** Cambia por la imagen de reserva cualquier <img> que falle, una sola vez (RF-31). */
@@ -62,7 +63,10 @@ function crearEnrutador(datos) {
       detalle.hidden = true;
       detalle.replaceChildren(); // detiene los videos de la vista anterior
       inicio.hidden = false;
-      window.scrollTo(0, scrollInicio);
+      // Si se llegó con un ancla (p. ej. desde la navegación), ir a esa sección; si no, volver a donde estaba.
+      const ancla = location.hash.length > 1 && document.getElementById(location.hash.slice(1));
+      if (ancla) ancla.scrollIntoView();
+      else window.scrollTo(0, scrollInicio);
     }
   };
 }
@@ -79,6 +83,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   pintarRedes(datos);
   pintarCatalogo(document.getElementById('catalogo'), datos.enlaces);
   pintarCreditos(document.getElementById('lista-creditos'), datos.creditos);
+  pintarNavegacion(document.getElementById('navegacion'), datos.enlaces);
+  activarVistaPrevia();
 
   const enrutar = crearEnrutador(datos);
   window.addEventListener('hashchange', enrutar);

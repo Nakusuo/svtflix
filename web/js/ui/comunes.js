@@ -2,9 +2,11 @@
  * Piezas que se repiten: tarjeta de contenido, fila con carrusel y titular de sección.
  */
 import { IMAGEN_RESERVA } from '../config.js';
+import { normalizar } from '../datos.js';
 import { el, urlSegura } from '../seguro.js';
 import { infoYouTube, miniaturaYouTube } from '../youtube.js';
 import { icono } from './iconos.js';
+import { registrarVistaPrevia } from './vista-previa.js';
 
 export function titular(texto, id) {
   return el('h2', { id, class: 'mb-1 font-display text-[1.05rem] uppercase tracking-wide sm:mb-2 sm:text-2xl', texto });
@@ -24,7 +26,7 @@ export function tarjeta(item, { ancho = 'w-[40vw] max-w-72 sm:w-72' } = {}) {
 
   const etiqueta = item.plataforma && item.plataforma !== 'YouTube' ? item.plataforma : yt?.tipo === 'lista' ? 'Lista' : '';
 
-  return el('a', {
+  const nodo = el('a', {
     href: destino,
     target: interna ? null : '_blank',
     rel: interna ? null : 'noopener',
@@ -40,9 +42,24 @@ export function tarjeta(item, { ancho = 'w-[40vw] max-w-72 sm:w-72' } = {}) {
   }),
   el('div', { class: 'absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent px-2.5 pb-2 pt-8 sm:px-3 sm:pb-2.5 sm:pt-10' },
     el('p', { class: 'line-clamp-2 text-[0.8rem] font-semibold leading-snug sm:text-sm', texto: item.titulo || 'Sin título' })));
+
+  registrarVistaPrevia(nodo, {
+    titulo: item.titulo || 'Sin título',
+    imagen: miniatura,
+    destino,
+    externo: !interna,
+    masInfo: interna || null,
+    etiqueta: interna ? 'Colección' : etiqueta || (yt?.tipo === 'video' ? 'Video' : ''),
+    meta: [item.categoria || item.seccion, interna ? 'Abrir colección' : yt ? 'Ver en YouTube' : item.plataforma ? `Abrir en ${item.plataforma}` : ''],
+    item,
+  });
+  return nodo;
 }
 
-/** Fila horizontal con flechas (desaparecen al llegar a un extremo). */
+/** "Going Seventeen" → "fila-going-seventeen" (ancla para la navegación). */
+export const anclaDe = (titulo) => `fila-${normalizar(titulo).replace(/_/g, '-')}`;
+
+/** Fila horizontal con flechas (desaparecen al llegar a un extremo) e indicador de página. */
 export function fila(titulo, items, crear = tarjeta, id) {
   const tarjetas = items.map((i) => crear(i)).filter(Boolean);
   if (!tarjetas.length) return null;
@@ -60,16 +77,27 @@ export function fila(titulo, items, crear = tarjeta, id) {
 
   const izq = flecha(-1);
   const der = flecha(1);
+
+  // Rayitas arriba a la derecha: cuántas "páginas" tiene la fila y en cuál estás (como Netflix).
+  const paginas = el('div', { class: 'hidden items-center gap-0.5 opacity-0 transition-opacity duration-300 group-hover/f:opacity-100 sm:flex', 'aria-hidden': 'true' });
   const actualizar = () => {
     izq.hidden = pista.scrollLeft < 8;
     der.hidden = pista.scrollLeft + pista.clientWidth > pista.scrollWidth - 8;
+    const total = Math.max(1, Math.ceil((pista.scrollWidth - 8) / pista.clientWidth));
+    const final = pista.scrollLeft + pista.clientWidth >= pista.scrollWidth - 8;
+    const actual = final ? total - 1 : Math.min(total - 1, Math.round(pista.scrollLeft / pista.clientWidth));
+    if (paginas.childElementCount !== total) {
+      paginas.replaceChildren(...Array.from({ length: total }, () => el('span', { class: 'h-0.5 w-3 rounded-full bg-white/30 transition-colors' })));
+    }
+    [...paginas.children].forEach((r, i) => r.classList.toggle('!bg-white/90', i === actual));
+    paginas.classList.toggle('sm:invisible', total < 2);
   };
   pista.addEventListener('scroll', actualizar, { passive: true });
-  requestAnimationFrame(actualizar);
+  new ResizeObserver(actualizar).observe(pista);
 
-  return el('section', { class: 'py-1.5 sm:py-3', 'aria-label': titulo },
-    el('div', { class: 'px-4 sm:px-10' }, titular(titulo, id)),
-    el('div', { class: 'group/f relative' }, izq, pista, der));
+  return el('section', { id: anclaDe(titulo), class: 'group/f scroll-mt-20 py-1.5 sm:py-3', 'aria-label': titulo },
+    el('div', { class: 'flex items-end justify-between gap-4 px-4 sm:px-10' }, titular(titulo, id), paginas),
+    el('div', { class: 'relative' }, izq, pista, der));
 }
 
 /** Agrupa una lista por una clave conservando el orden de aparición. */

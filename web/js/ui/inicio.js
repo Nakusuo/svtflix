@@ -2,8 +2,10 @@
  * Página de inicio: portada, Top 13, redes, filas del catálogo y créditos.
  */
 import { el, urlSegura } from '../seguro.js';
-import { agrupar, fila, mensajeVacio, titular } from './comunes.js';
+import { alCambiarMiLista, miLista } from '../mi-lista.js';
+import { agrupar, anclaDe, fila, mensajeVacio, titular } from './comunes.js';
 import { icono } from './iconos.js';
+import { registrarVistaPrevia } from './vista-previa.js';
 
 const reducirMovimiento = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -102,6 +104,16 @@ function tarjetaTop(m) {
       el('p', { class: 'text-[0.6rem] font-bold uppercase tracking-widest text-rosa', texto: etiqueta }),
       el('p', { class: 'font-display text-sm tracking-wide', texto: m.nombre }))));
   item.style.setProperty('--cifras', numero.length || 1);
+  // Al pasar el ratón: su clip de video, como las vistas previas de Netflix
+  registrarVistaPrevia(item.querySelector('.top13-tarjeta'), {
+    titulo: m.nombre,
+    imagen: urlSegura(m.foto_fondo) || urlSegura(m.url_foto),
+    video: urlSegura(m.video_fondo),
+    destino: `#/miembro/${encodeURIComponent(m.id)}`,
+    masInfo: `#/miembro/${encodeURIComponent(m.id)}`,
+    etiqueta: `Top ${numero}`,
+    meta: [m.subunidad, m.signo, m.fecha_nacimiento],
+  });
   return item;
 }
 
@@ -138,13 +150,56 @@ export function pintarRedes(datos) {
 // ---------- Catálogo (RF-21) ----------
 
 export function pintarCatalogo(contenedor, enlaces) {
+  // "Mi lista" va primero y se repinta sola cada vez que alguien añade o quita algo.
+  const ranuraMiLista = el('div');
+  const pintarMiLista = () => {
+    ranuraMiLista.replaceChildren(fila('Mi lista', miLista()) || '');
+    document.querySelector('[data-nav="mi-lista"]')?.toggleAttribute('hidden', !miLista().length);
+  };
+  alCambiarMiLista(pintarMiLista);
+  pintarMiLista();
+
   if (!enlaces?.length) {
-    contenedor.replaceChildren(mensajeVacio('No se pudo cargar el catálogo.'));
+    contenedor.replaceChildren(ranuraMiLista, mensajeVacio('No se pudo cargar el catálogo.'));
     return;
   }
   const ordenados = [...enlaces].sort((a, b) => (Number(a.orden_categoria) || 99) - (Number(b.orden_categoria) || 99));
   const filas = [...agrupar(ordenados, 'categoria')].map(([categoria, items]) => fila(categoria, items));
-  contenedor.replaceChildren(...filas.filter(Boolean));
+  contenedor.replaceChildren(ranuraMiLista, ...filas.filter(Boolean));
+}
+
+// ---------- Navegación con pastillas (como la de Netflix) ----------
+
+export function pintarNavegacion(nav, enlaces) {
+  if (!nav) return;
+  const categorias = [...new Set([...(enlaces || [])]
+    .sort((a, b) => (Number(a.orden_categoria) || 99) - (Number(b.orden_categoria) || 99))
+    .map((e) => e.categoria).filter(Boolean))];
+  const pastilla = (texto, href, extra = {}) => el('a', {
+    href, ...extra,
+    class: 'whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-semibold text-texto/75 transition hover:text-white data-[activa]:bg-white/15 data-[activa]:text-white',
+    texto,
+  });
+  const pastillas = [
+    pastilla('Inicio', '#', { 'data-ancla': 'portada' }),
+    pastilla('Integrantes', '#miembros', { 'data-ancla': 'miembros' }),
+    ...categorias.map((c) => pastilla(c, `#${anclaDe(c)}`, { 'data-ancla': anclaDe(c) })),
+    pastilla('Mi lista', `#${anclaDe('Mi lista')}`, { 'data-ancla': anclaDe('Mi lista'), 'data-nav': 'mi-lista', hidden: !miLista().length }),
+  ];
+  nav.replaceChildren(...pastillas);
+
+  // Marca la sección que está a la vista
+  const marcar = (id) => pastillas.forEach((p) => p.toggleAttribute('data-activa', p.dataset.ancla === id));
+  marcar('portada');
+  const observador = new IntersectionObserver((entradas) => {
+    entradas.filter((e) => e.isIntersecting).forEach((e) => marcar(e.target.id));
+  }, { rootMargin: '-35% 0px -60% 0px' });
+  const observar = () => pastillas.forEach((p) => {
+    const objetivo = document.getElementById(p.dataset.ancla);
+    if (objetivo) observador.observe(objetivo);
+  });
+  observar();
+  alCambiarMiLista(() => setTimeout(observar));
 }
 
 // ---------- Créditos (RF-29) ----------

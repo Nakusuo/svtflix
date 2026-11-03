@@ -8,6 +8,11 @@ const TRAZOS = {
   izquierda: ['m15 18-6-6 6-6'],
   derecha: ['m9 18 6-6-6-6'],
   volver: ['M19 12H5', 'm12 19-7-7 7-7'],
+  mas: ['M12 5v14', 'M5 12h14'],
+  hecho: ['M20 6 9 17l-5-5'],
+  abajo: ['m6 9 6 6 6-6'],
+  sonido: ['M11 5 6 9H2v6h4l5 4V5Z', 'M15.5 8.5a5 5 0 0 1 0 7', 'M19 5a10 10 0 0 1 0 14'],
+  silencio: ['M11 5 6 9H2v6h4l5 4V5Z', 'm22 9-6 6', 'm16 9 6 6'],
 };
 
 const NS = 'http://www.w3.org/2000/svg';
