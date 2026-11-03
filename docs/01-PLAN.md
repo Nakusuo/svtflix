@@ -162,6 +162,7 @@ Cada fase termina con una rama `release/*` → `main` y un tag. Vercel publica `
 - **D0.** Sin backend propio. Google Sheets (CSV publicado) es la única fuente de contenido.
 - **D0.1.** Se añaden 2 pestañas a la hoja de la especificación: `Redes` y `Creditos`. En Canva esas secciones existen y la especificación no las contemplaba.
 - **D0.2.** Una categoría del catálogo puede apuntar a **un video o a una lista de YouTube**, como hace Canva hoy con las listas.
+- **D4 (logo).** 2026-11-02: el logo imita el estilo del de Netflix (letras condensadas rojas `#E50914` con la curva) pero dice **SVTFLIX**. Se hace con Bebas Neue (licencia libre OFL) convertida a trazos con `npm run logo` (`tools/logo.mjs`). No se usa *Netflix Sans* ni el logo de Netflix: son privados.
 
 ### Pendientes (necesitan respuesta del equipo)
 | ID | Pregunta | Recomendación |
