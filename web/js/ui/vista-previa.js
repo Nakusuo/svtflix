@@ -10,6 +10,7 @@ import { el } from '../seguro.js';
 import { icono } from './iconos.js';
 
 const RETRASO_MS = 450;
+const RETRASO_VIDEO_MS = 700; // como Netflix: primero la imagen, luego arranca la vista previa
 const MARGEN = 12; // distancia mínima a los bordes de la ventana
 const registro = new WeakMap();
 
@@ -44,8 +45,16 @@ function construir(info) {
     video.addEventListener('playing', () => video.classList.remove('opacity-0'), { once: true });
     medio.append(video);
   }
+  // Vista previa de YouTube (silenciada). Se muestra solo cuando YouTube confirma que está reproduciendo;
+  // si el video no permite incrustarse, se queda la miniatura.
+  let youtube = null;
+  if (!video && info.youtube && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    youtube = previaYouTube(info.youtube);
+    medio.append(youtube.marco);
+  }
+
   medio.append(
-    el('div', { class: 'absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/85 to-transparent' }),
+    el('div', { class: 'pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/85 to-transparent' }),
     el('p', { class: 'absolute bottom-2 left-3 right-12 line-clamp-2 font-display text-lg uppercase leading-tight drop-shadow-lg', texto: info.titulo }));
 
   const botones = el('div', { class: 'flex items-center gap-2' },
@@ -64,12 +73,15 @@ function construir(info) {
     botones.append(boton);
   }
 
-  if (video) {
+  if (video || youtube) {
+    let silenciado = true;
     const sonido = botonRedondo({ 'aria-label': 'Activar sonido' }, icono('silencio', 'size-4'));
     sonido.addEventListener('click', () => {
-      video.muted = !video.muted;
-      sonido.replaceChildren(icono(video.muted ? 'silencio' : 'sonido', 'size-4'));
-      sonido.setAttribute('aria-label', video.muted ? 'Activar sonido' : 'Silenciar');
+      silenciado = !silenciado;
+      if (video) video.muted = silenciado;
+      else youtube.silenciar(silenciado);
+      sonido.replaceChildren(icono(silenciado ? 'silencio' : 'sonido', 'size-4'));
+      sonido.setAttribute('aria-label', silenciado ? 'Activar sonido' : 'Silenciar');
     });
     botones.append(sonido);
   }
@@ -79,7 +91,7 @@ function construir(info) {
       botonRedondo({ href: info.masInfo, 'aria-label': `Más información de ${info.titulo}` }, icono('abajo', 'size-5')));
   }
 
-  return el('div', {
+  const ventana = el('div', {
     role: 'dialog', 'aria-label': info.titulo,
     class: 'vista-previa absolute z-50 overflow-hidden rounded-md bg-superficie shadow-[0_18px_50px_-8px_rgba(0,0,0,.85)] ring-1 ring-white/10',
   },
@@ -92,6 +104,52 @@ function construir(info) {
         i ? el('span', { class: 'text-texto-suave/60', 'aria-hidden': 'true', texto: '•' }) : null,
         el('span', { class: i ? 'text-texto/80' : 'text-rosa', texto: m }),
       ]))));
+
+  if (youtube) setTimeout(() => ventana.isConnected && youtube.cargar(), RETRASO_VIDEO_MS);
+  return ventana;
+}
+
+/**
+ * Iframe de YouTube sin controles, silenciado y en bucle. Se comunica con postMessage (enablejsapi=1)
+ * sin cargar la librería de YouTube: así sabemos cuándo empieza a reproducirse y podemos quitar el silencio.
+ */
+function previaYouTube({ tipo, id }) {
+  const marco = el('iframe', {
+    title: 'Vista previa', tabindex: '-1', allow: 'autoplay; encrypted-media', referrerpolicy: 'strict-origin-when-cross-origin',
+    // Sin eventos de ratón (si no, al entrar en el iframe la ventana creería que el ratón se fue) y algo ampliado
+    // para recortar los rótulos que YouTube pone arriba.
+    class: 'pointer-events-none absolute inset-0 h-full w-full scale-[1.32] opacity-0 transition-opacity duration-700',
+  });
+  const avisar = (func, args = []) => marco.contentWindow?.postMessage(JSON.stringify({ event: 'command', func, args }), '*');
+
+  const alMensaje = (e) => {
+    if (e.source !== marco.contentWindow) return;
+    let d;
+    try { d = JSON.parse(e.data); } catch { return; }
+    const estado = d.event === 'onStateChange' ? d.info : d.info?.playerState;
+    if (estado === 1) marco.classList.remove('opacity-0'); // 1 = reproduciendo
+  };
+
+  return {
+    marco,
+    cargar() {
+      const p = new URLSearchParams({
+        autoplay: '1', mute: '1', controls: '0', playsinline: '1', rel: '0', iv_load_policy: '3',
+        disablekb: '1', fs: '0', enablejsapi: '1', origin: location.origin,
+      });
+      if (tipo === 'video') { p.set('loop', '1'); p.set('playlist', id); } else p.set('list', id);
+      window.addEventListener('message', alMensaje);
+      marco.addEventListener('load', () => {
+        marco.contentWindow?.postMessage(JSON.stringify({ event: 'listening', id: 1, channel: 'widget' }), '*');
+      }, { once: true });
+      marco.src = `https://www.youtube-nocookie.com/embed/${tipo === 'video' ? id : 'videoseries'}?${p}`;
+      // Al cerrarse la ventana, el iframe desaparece y dejamos de escuchar
+      new MutationObserver((_, obs) => {
+        if (!marco.isConnected) { window.removeEventListener('message', alMensaje); obs.disconnect(); }
+      }).observe(document.body, { childList: true });
+    },
+    silenciar(si) { avisar(si ? 'mute' : 'unMute'); },
+  };
 }
 
 export function activarVistaPrevia() {

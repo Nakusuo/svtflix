@@ -62,7 +62,7 @@ export function vistaMiembro(datos, id) {
             m.biografia && el('p', { class: 'mb-4 text-[0.95rem] leading-relaxed text-texto/90 sm:text-base', texto: m.biografia }),
             ig && el('a', { href: ig, target: '_blank', rel: 'noopener', class: 'inline-flex min-h-11 items-center gap-2 rounded-md bg-white/15 px-4 text-sm font-bold ring-1 ring-white/20 backdrop-blur transition active:scale-95 hover:bg-white/25' }, 'Instagram', icono('externo', 'size-3.5'))))),
     }),
-    filasDatos.length && el('dl', { class: 'mx-4 mb-4 grid grid-cols-2 gap-x-6 rounded-lg bg-superficie/70 px-4 pt-4 ring-1 ring-white/5 sm:mx-10 sm:grid-cols-3 sm:bg-transparent sm:px-0 sm:ring-0 lg:grid-cols-6' }, filasDatos.map((par) => el('div', { class: 'min-w-0 break-words' }, par))),
+    filasDatos.length > 0 && el('dl', { class: 'mx-4 mb-4 grid grid-cols-2 gap-x-6 rounded-lg bg-superficie/70 px-4 pt-4 ring-1 ring-white/5 sm:mx-10 sm:grid-cols-3 sm:bg-transparent sm:px-0 sm:ring-0 lg:grid-cols-6' }, filasDatos.map((par) => el('div', { class: 'min-w-0 break-words' }, par))),
     fila('Música', suyo(datos.musica)) || mensajeVacio('Aún no hay música de este integrante.'),
     fila('Programas', suyo(datos.programas)) || mensajeVacio('Aún no hay programas de este integrante.'));
 }

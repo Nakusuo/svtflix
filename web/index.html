@@ -31,15 +31,26 @@
   <!-- Cabecera (RF-07) -->
   <header id="cabecera" class="fixed inset-x-0 top-0 z-40 flex items-center justify-between bg-gradient-to-b from-black/70 to-transparent pb-3 pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] pt-[max(0.75rem,env(safe-area-inset-top))] transition-colors duration-300 sm:pl-10 sm:pr-10">
     <div class="flex items-center gap-8">
-      <a href="#" class="group flex flex-col items-center leading-none" aria-label="SVTFLIX en Español, inicio">
+      <a href="#" class="group flex shrink-0 flex-col items-center leading-none" aria-label="SVTFLIX en Español, inicio">
       <img src="img/logo-svtflix.svg" alt="" width="472" height="173" class="h-8 w-auto drop-shadow-[0_2px_10px_rgba(0,0,0,.6)] transition duration-300 group-hover:scale-[1.03] sm:h-11">
       <span class="mt-1 text-[0.55rem] font-bold uppercase tracking-[0.45em] text-texto sm:text-[0.6rem]">en español</span>
     </a>
       <nav id="navegacion" aria-label="Secciones" class="hidden items-center gap-1 lg:flex"></nav>
     </div>
-    <a id="enlace-carat" href="https://weverse.io/seventeen/feed" target="_blank" rel="noopener" class="-mr-2 inline-flex min-h-11 items-center px-2 text-sm font-semibold uppercase tracking-widest transition hover:text-rosa active:scale-95">
-      Carat
-    </a>
+    <div class="flex items-center gap-1 sm:gap-3">
+      <!-- Buscador (RF-26): la lupa despliega el campo; los resultados van en #/buscar/<texto> -->
+      <form role="search" class="flex items-center rounded-full transition-colors in-data-buscando:bg-black/70 in-data-buscando:ring-1 in-data-buscando:ring-white/25" action="#">
+        <button type="button" id="abrir-buscador" aria-label="Buscar" aria-expanded="false" aria-controls="campo-busqueda" class="grid size-11 shrink-0 place-items-center rounded-full transition hover:text-rosa active:scale-90">
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="size-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </button>
+        <input id="campo-busqueda" type="search" enterkeyhint="search" autocomplete="off" spellcheck="false"
+          placeholder="Canción, programa, integrante…" aria-label="Buscar en SVTFLIX"
+          class="w-0 bg-transparent text-sm text-texto opacity-0 outline-none transition-all duration-300 placeholder:text-texto-suave in-data-buscando:w-[calc(100vw-12rem)] in-data-buscando:pr-4 in-data-buscando:opacity-100 sm:in-data-buscando:w-56 [&::-webkit-search-cancel-button]:hidden">
+      </form>
+      <a id="enlace-carat" href="https://weverse.io/seventeen/feed" target="_blank" rel="noopener" class="-mr-2 inline-flex min-h-11 items-center px-2 text-sm font-semibold uppercase tracking-widest transition hover:text-rosa active:scale-95 in-data-buscando:hidden xl:in-data-buscando:inline-flex">
+        Carat
+      </a>
+    </div>
   </header>
 
   <main id="contenido">

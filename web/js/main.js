@@ -5,6 +5,8 @@ import { IMAGEN_RESERVA } from './config.js';
 import { cargarTodo } from './datos.js';
 import { pintarCatalogo, pintarCreditos, pintarNavegacion, pintarPortada, pintarRedes, pintarTop13 } from './ui/inicio.js';
 import { activarVistaPrevia } from './ui/vista-previa.js';
+import { crearIndice } from './buscar.js';
+import { activarBuscador, vistaBusqueda } from './ui/busqueda.js';
 import { vistaMiembro, vistaPagina } from './ui/vistas.js';
 
 /** Cambia por la imagen de reserva cualquier <img> que falle, una sola vez (RF-31). */
@@ -51,11 +53,12 @@ function crearEnrutador(datos) {
   let scrollInicio = 0;
 
   return function enrutar() {
-    const [, tipo, id] = location.hash.match(/^#\/(miembro|pagina)\/([^/?#]+)/) || [];
+    const [, tipo, id] = location.hash.match(/^#\/(miembro|pagina|buscar)\/(.+)$/) || [];
     if (tipo) {
       if (!inicio.hidden) scrollInicio = window.scrollY;
-      const vista = tipo === 'miembro' ? vistaMiembro : vistaPagina;
-      detalle.replaceChildren(vista(datos, decodeURIComponent(id)));
+      const valor = decodeURIComponent(id);
+      const vista = tipo === 'buscar' ? vistaBusqueda(valor) : (tipo === 'miembro' ? vistaMiembro : vistaPagina)(datos, valor);
+      detalle.replaceChildren(vista);
       inicio.hidden = true;
       detalle.hidden = false;
       window.scrollTo(0, 0);
@@ -86,7 +89,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   pintarNavegacion(document.getElementById('navegacion'), datos.enlaces);
   activarVistaPrevia();
 
+  crearIndice(datos);
   const enrutar = crearEnrutador(datos);
   window.addEventListener('hashchange', enrutar);
+  activarBuscador(enrutar);
   enrutar();
 });

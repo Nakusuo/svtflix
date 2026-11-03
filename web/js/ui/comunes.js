@@ -46,6 +46,7 @@ export function tarjeta(item, { ancho = 'w-[40vw] max-w-72 sm:w-72' } = {}) {
   registrarVistaPrevia(nodo, {
     titulo: item.titulo || 'Sin título',
     imagen: miniatura,
+    youtube: interna ? null : yt,
     destino,
     externo: !interna,
     masInfo: interna || null,

@@ -29,7 +29,8 @@ export function el(etiqueta, props = {}, ...hijos) {
     else nodo.setAttribute(clave, valor === true ? '' : valor);
   }
   for (const hijo of hijos.flat(Infinity)) {
-    if (hijo !== null && hijo !== undefined && hijo !== false && hijo !== '') nodo.append(hijo);
+    // Se ignoran null, undefined, false, '' y 0 (así `lista.length && …` nunca pinta un "0" suelto)
+    if (hijo !== null && hijo !== undefined && hijo !== false && hijo !== '' && hijo !== 0) nodo.append(hijo);
   }
   return nodo;
 }
