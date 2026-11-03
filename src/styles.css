@@ -27,6 +27,9 @@
   html {
     color-scheme: dark;
     scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent; /* sin destello azul al tocar (Android) */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
@@ -56,6 +59,33 @@
 }
 
 @layer components {
+  /* Chips de redes: en móvil una sola fila deslizable; desde sm se reparten en varias líneas. */
+  .carril-chips {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: 1rem;
+    padding: 0.25rem 1rem 0.5rem;
+    scrollbar-width: none;
+  }
+  .carril-chips::-webkit-scrollbar {
+    display: none;
+  }
+  .carril-chips > li {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+  @media (min-width: 640px) {
+    .carril-chips {
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      overflow: visible;
+      padding-inline: 2.5rem;
+    }
+  }
+
   /* Bloque gris animado mientras llegan los datos (HU-26). */
   .esqueleto {
     background: linear-gradient(

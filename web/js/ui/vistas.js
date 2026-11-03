@@ -6,10 +6,12 @@
 import { normalizar } from '../datos.js';
 import { el, urlSegura } from '../seguro.js';
 import { agrupar, fila, mensajeVacio, tarjeta } from './comunes.js';
+import { icono } from './iconos.js';
 
 const volver = () => el('a', {
-  href: '#', class: 'mb-6 inline-flex items-center gap-2 text-sm font-semibold text-texto-suave transition hover:text-rosa',
-}, el('span', { 'aria-hidden': 'true', texto: '←' }), 'Volver al inicio');
+  href: '#',
+  class: 'mb-5 inline-flex min-h-11 items-center gap-2 rounded-full bg-black/40 pl-3 pr-4 text-sm font-semibold text-texto ring-1 ring-white/15 backdrop-blur transition active:scale-95 hover:text-rosa hover:ring-rosa/50 sm:mb-6',
+}, icono('volver'), 'Volver al inicio');
 
 /** Cabecera grande con imagen o video de fondo. */
 function cabecera({ imagen, video, contenido }) {
@@ -20,7 +22,7 @@ function cabecera({ imagen, video, contenido }) {
     v.muted = true;
     fondo.append(v);
   }
-  return el('header', { class: 'relative isolate flex min-h-[60vh] items-end overflow-hidden px-4 pb-10 pt-28 sm:px-10' },
+  return el('header', { class: 'relative isolate flex min-h-[55svh] items-end overflow-hidden px-4 pb-6 pt-24 sm:min-h-[60vh] sm:px-10 sm:pb-10 sm:pt-28' },
     fondo,
     el('div', { class: 'absolute inset-0 -z-10 bg-gradient-to-t from-fondo via-fondo/60 to-fondo/10', 'aria-hidden': 'true' }),
     el('div', { class: 'absolute inset-0 -z-10 bg-gradient-to-r from-fondo/80 to-transparent', 'aria-hidden': 'true' }),
@@ -49,15 +51,18 @@ export function vistaMiembro(datos, id) {
     cabecera({
       imagen: urlSegura(m.foto_fondo),
       video: urlSegura(m.video_fondo),
-      contenido: el('div', { class: 'flex flex-col gap-8 sm:flex-row sm:items-end' },
-        el('img', { src: urlSegura(m.url_foto), alt: `Foto de ${m.nombre}`, width: 600, height: 889, class: 'w-36 shrink-0 rounded-md shadow-2xl shadow-black/70 ring-1 ring-white/15 sm:w-48' }),
-        el('div', { class: 'max-w-2xl' },
-          el('p', { class: 'mb-1 text-xs font-bold uppercase tracking-[0.3em] text-rosa', texto: [m.rol, m.subunidad].filter(Boolean).join(' · ') }),
-          el('h1', { class: 'mb-3 font-display text-5xl uppercase sm:text-7xl' }, m.nombre, m.emoji && el('span', { class: 'ml-3 align-middle text-3xl sm:text-4xl', texto: m.emoji })),
-          m.biografia && el('p', { class: 'mb-4 leading-relaxed text-texto/90', texto: m.biografia }),
-          ig && el('a', { href: ig, target: '_blank', rel: 'noopener', class: 'inline-flex items-center gap-2 rounded-md bg-white/15 px-4 py-2 text-sm font-bold ring-1 ring-white/20 backdrop-blur transition hover:bg-white/25' }, 'Instagram', el('span', { 'aria-hidden': 'true', texto: '↗' })))),
+      contenido: el('div', { class: 'grid grid-cols-[6.5rem_1fr] items-end gap-x-4 gap-y-4 sm:flex sm:gap-8' },
+        el('img', { src: urlSegura(m.url_foto), alt: `Foto de ${m.nombre}`, width: 600, height: 889, class: 'w-full shrink-0 rounded-md shadow-2xl shadow-black/70 ring-1 ring-white/15 sm:w-48' }),
+        el('div', { class: 'contents max-w-2xl sm:block' },
+          el('div', { class: 'self-end' },
+            el('p', { class: 'mb-1 text-[0.65rem] font-bold uppercase tracking-[0.3em] text-rosa sm:text-xs', texto: [m.rol, m.subunidad].filter(Boolean).join(' · ') }),
+            el('h1', { class: 'font-display text-[2.6rem] uppercase leading-none sm:mb-3 sm:text-7xl' }, m.nombre),
+            m.emoji && el('p', { class: 'mt-1 text-2xl sm:text-3xl', texto: m.emoji })),
+          el('div', { class: 'col-span-2' },
+            m.biografia && el('p', { class: 'mb-4 text-[0.95rem] leading-relaxed text-texto/90 sm:text-base', texto: m.biografia }),
+            ig && el('a', { href: ig, target: '_blank', rel: 'noopener', class: 'inline-flex min-h-11 items-center gap-2 rounded-md bg-white/15 px-4 text-sm font-bold ring-1 ring-white/20 backdrop-blur transition active:scale-95 hover:bg-white/25' }, 'Instagram', icono('externo', 'size-3.5'))))),
     }),
-    filasDatos.length && el('dl', { class: 'grid grid-cols-2 gap-x-8 px-4 pb-4 sm:grid-cols-3 sm:px-10 lg:grid-cols-6' }, filasDatos.map((par) => el('div', {}, par))),
+    filasDatos.length && el('dl', { class: 'mx-4 mb-4 grid grid-cols-2 gap-x-6 rounded-lg bg-superficie/70 px-4 pt-4 ring-1 ring-white/5 sm:mx-10 sm:grid-cols-3 sm:bg-transparent sm:px-0 sm:ring-0 lg:grid-cols-6' }, filasDatos.map((par) => el('div', { class: 'min-w-0 break-words' }, par))),
     fila('Música', suyo(datos.musica)) || mensajeVacio('Aún no hay música de este integrante.'),
     fila('Programas', suyo(datos.programas)) || mensajeVacio('Aún no hay programas de este integrante.'));
 }
@@ -75,14 +80,14 @@ export function vistaPagina(datos, id) {
     cabecera({
       imagen: urlSegura(p.url_portada),
       contenido: el('div', { class: 'max-w-2xl' },
-        el('h1', { class: 'mb-3 font-display text-4xl uppercase sm:text-6xl', texto: p.titulo }),
-        p.descripcion && el('p', { class: 'leading-relaxed text-texto/90', texto: p.descripcion }),
+        el('h1', { class: 'mb-2 font-display text-[2.2rem] uppercase leading-none sm:mb-3 sm:text-6xl', texto: p.titulo }),
+        p.descripcion && el('p', { class: 'text-[0.95rem] leading-relaxed text-texto/90 sm:text-base', texto: p.descripcion }),
         el('p', { class: 'mt-3 text-sm text-texto-suave', texto: `${items.length} elementos` })),
     }),
     items.length
-      ? secciones.map(([seccion, lista]) => el('section', { class: 'px-4 py-4 sm:px-10', 'aria-label': seccion || p.titulo },
-        seccion && el('h2', { class: 'mb-3 font-display text-lg uppercase tracking-wide sm:text-xl', texto: seccion }),
-        el('div', { class: 'grid grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] gap-3' },
+      ? secciones.map(([seccion, lista]) => el('section', { class: 'px-4 py-3 sm:px-10 sm:py-4', 'aria-label': seccion || p.titulo },
+        seccion && el('h2', { class: 'mb-2 font-display text-base uppercase tracking-wide sm:mb-3 sm:text-xl', texto: seccion }),
+        el('div', { class: 'grid grid-cols-2 gap-2 sm:grid-cols-[repeat(auto-fill,minmax(14rem,1fr))] sm:gap-3' },
           lista.map((i) => tarjeta(i, { ancho: 'w-full' })))))
       : mensajeVacio('Aún no hay contenido en esta página.'));
 }

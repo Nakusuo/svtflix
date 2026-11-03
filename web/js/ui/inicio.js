@@ -3,6 +3,7 @@
  */
 import { el, urlSegura } from '../seguro.js';
 import { agrupar, fila, mensajeVacio, titular } from './comunes.js';
+import { icono } from './iconos.js';
 
 const reducirMovimiento = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -38,21 +39,21 @@ export function pintarPortada(contenedor, filas) {
     fondo,
     el('div', { class: 'absolute inset-0 -z-10 bg-gradient-to-r from-fondo/90 via-fondo/30 to-transparent', 'aria-hidden': 'true' }),
     el('div', { class: 'absolute inset-0 -z-10 bg-gradient-to-t from-fondo via-transparent to-fondo/40', 'aria-hidden': 'true' }),
-    el('div', { class: 'relative max-w-md animate-[aparecer_.8s_ease-out_both]' },
-      el('p', { class: 'mb-3 text-xs font-bold uppercase tracking-[0.35em] text-rosa', texto: 'Nuevo lanzamiento' }),
+    el('div', { class: 'relative mx-auto flex w-full max-w-sm flex-col items-center text-center animate-[aparecer_.8s_ease-out_both] sm:mx-0 sm:max-w-md sm:items-start sm:text-left' },
+      el('p', { class: 'mb-2 text-[0.65rem] font-bold uppercase tracking-[0.35em] text-rosa sm:mb-3 sm:text-xs', texto: 'Nuevo lanzamiento' }),
       logo
-        ? el('img', { src: logo, alt: p.titulo_album, class: 'mb-3 w-44 drop-shadow-[0_4px_24px_rgba(0,0,0,.6)] sm:w-56' })
+        ? el('img', { src: logo, alt: p.titulo_album, width: 526, height: 526, class: 'mb-2 w-36 drop-shadow-[0_4px_24px_rgba(0,0,0,.6)] sm:mb-3 sm:w-56' })
         : el('h1', { class: 'mb-2 font-display text-5xl uppercase sm:text-6xl', texto: p.titulo_album }),
       logo && el('h1', { class: 'sr-only', texto: p.titulo_album }),
-      p.subtitulo && el('p', { class: 'mb-6 text-sm font-semibold uppercase tracking-widest text-texto/80', texto: p.subtitulo }),
-      el('div', { class: 'flex flex-wrap gap-3' },
+      p.subtitulo && el('p', { class: 'mb-5 text-xs font-semibold uppercase tracking-widest text-texto/80 sm:mb-6 sm:text-sm', texto: p.subtitulo }),
+      el('div', { class: 'flex w-full gap-3 sm:w-auto [&>*]:flex-1 sm:[&>*]:flex-none' },
         principal && el('a', {
           href: principal, target: '_blank', rel: 'noopener',
-          class: 'inline-flex items-center gap-2 rounded-md bg-texto px-6 py-3 font-bold text-fondo shadow-xl shadow-black/40 transition hover:bg-white hover:shadow-rosa/20 active:scale-95',
-        }, el('span', { 'aria-hidden': 'true', texto: '▶' }), 'Reproducir'),
+          class: 'inline-flex min-h-12 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-texto px-4 sm:px-6 font-bold text-fondo shadow-xl shadow-black/40 transition hover:bg-white hover:shadow-rosa/20 active:scale-95',
+        }, icono('play', 'size-5'), 'Reproducir'),
         secundario && p.texto_boton_secundario && el('a', {
           href: secundario, target: '_blank', rel: 'noopener',
-          class: 'inline-flex items-center gap-2 rounded-md bg-white/15 px-6 py-3 font-bold text-texto ring-1 ring-white/20 backdrop-blur transition hover:bg-white/25 active:scale-95',
+          class: 'inline-flex min-h-12 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-white/15 px-4 sm:px-6 font-bold text-texto ring-1 ring-white/20 backdrop-blur transition hover:bg-white/25 active:scale-95',
           texto: p.texto_boton_secundario,
         }))),
   );
@@ -88,6 +89,8 @@ export function pintarTop13(contenedor, miembros) {
   }
   const ordenados = [...miembros].sort((a, b) => Number(a.numero) - Number(b.numero));
   const seccion = fila('Conoce a los 13 miembros', ordenados, tarjetaTop, 'titulo-miembros');
+  // Se monta un poco sobre el final de la portada, como en las apps de streaming.
+  seccion.classList.add('relative', 'z-10', '-mt-14', 'sm:-mt-16');
   contenedor.replaceWith(Object.assign(seccion, { id: 'miembros' }));
 }
 
@@ -104,8 +107,8 @@ export function pintarRedes(datos) {
     lista.replaceChildren(...items.map((r) => el('li', {},
       el('a', {
         href: urlSegura(r.url), target: '_blank', rel: 'noopener',
-        class: 'inline-flex items-center gap-2 rounded-full bg-superficie px-4 py-2 text-sm font-semibold ring-1 ring-white/10 transition hover:-translate-y-0.5 hover:bg-superficie-alta hover:ring-rosa/50',
-      }, r.nombre, el('span', { class: 'text-texto-suave', 'aria-hidden': 'true', texto: '↗' })))));
+        class: 'inline-flex min-h-11 items-center gap-1.5 whitespace-nowrap rounded-full bg-superficie px-4 text-sm font-semibold ring-1 ring-white/10 transition active:scale-95 hover:-translate-y-0.5 hover:bg-superficie-alta hover:ring-rosa/50',
+      }, r.nombre, icono('externo', 'size-3.5 text-texto-suave')))));
   });
 }
 
@@ -127,8 +130,12 @@ export function pintarCreditos(contenedor, creditos) {
   if (!creditos?.length) return;
   const partes = creditos.flatMap((c, i) => {
     const url = urlSegura(c.url);
-    const nombre = url ? el('a', { href: url, target: '_blank', rel: 'noopener', class: 'underline hover:text-rosa', texto: c.nombre }) : c.nombre;
-    return i ? [el('span', { class: 'mx-1.5 text-rosa/70', 'aria-hidden': 'true', texto: '✦' }), nombre] : [nombre];
+    const nombre = url
+      ? el('a', { href: url, target: '_blank', rel: 'noopener', class: 'whitespace-nowrap underline hover:text-rosa', texto: c.nombre })
+      : el('span', { class: 'whitespace-nowrap', texto: c.nombre });
+    // El ✦ va pegado (espacio duro) al nombre anterior y la línea solo se parte después de él,
+    // así nunca empieza una línea con ✦ ni se corta un nombre por la mitad.
+    return i ? ['\u00a0', el('span', { class: 'text-rosa/70', 'aria-hidden': 'true', texto: '✦' }), ' ', nombre] : [nombre];
   });
   contenedor.replaceChildren(...partes);
 }

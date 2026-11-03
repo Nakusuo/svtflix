@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>SVTFLIX en Español</title>
   <meta name="description" content="Sitio fan que recopila contenido de SEVENTEEN subtitulado al español: música, predebut, Going Seventeen, conciertos y más.">
   <meta name="theme-color" content="#08080b">
@@ -29,19 +29,19 @@
   </a>
 
   <!-- Cabecera (RF-07) -->
-  <header id="cabecera" class="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-4 py-3 transition-colors duration-300 sm:px-10">
+  <header id="cabecera" class="fixed inset-x-0 top-0 z-40 flex items-center justify-between bg-gradient-to-b from-black/70 to-transparent pb-3 pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] pt-[max(0.75rem,env(safe-area-inset-top))] transition-colors duration-300 sm:pl-10 sm:pr-10">
     <a href="#" class="group flex flex-col items-center leading-none" aria-label="SVTFLIX en Español, inicio">
       <img src="img/logo-svtflix.svg" alt="" width="472" height="173" class="h-8 w-auto drop-shadow-[0_2px_10px_rgba(0,0,0,.6)] transition duration-300 group-hover:scale-[1.03] sm:h-11">
       <span class="mt-1 text-[0.55rem] font-bold uppercase tracking-[0.45em] text-texto sm:text-[0.6rem]">en español</span>
     </a>
-    <a id="enlace-carat" href="https://weverse.io/seventeen/feed" target="_blank" rel="noopener" class="text-sm font-semibold uppercase tracking-widest hover:text-rosa">
+    <a id="enlace-carat" href="https://weverse.io/seventeen/feed" target="_blank" rel="noopener" class="-mr-2 inline-flex min-h-11 items-center px-2 text-sm font-semibold uppercase tracking-widest transition hover:text-rosa active:scale-95">
       Carat
     </a>
   </header>
 
   <main id="contenido">
     <!-- Portada / hero (RF-08 a RF-11) -->
-    <section id="portada" aria-label="Lanzamiento destacado" class="relative isolate flex min-h-[70vh] items-end overflow-hidden px-4 pb-12 sm:min-h-[85vh] sm:px-10">
+    <section id="portada" aria-label="Lanzamiento destacado" class="relative isolate flex min-h-[78svh] items-end overflow-hidden px-4 pb-20 pt-24 sm:min-h-[85vh] sm:px-10 sm:pb-24">
       <div class="esqueleto absolute inset-0 rounded-none" aria-hidden="true"></div>
       <div class="absolute inset-0 bg-gradient-to-t from-fondo via-fondo/40 to-transparent" aria-hidden="true"></div>
       <div class="relative max-w-xl">
@@ -57,18 +57,18 @@
     </section>
 
     <!-- Redes y plataformas (RF-20) -->
-    <section id="sigue" aria-labelledby="titulo-sigue" class="px-4 py-6 sm:px-10">
-      <h2 id="titulo-sigue" class="mb-4 font-display text-xl uppercase sm:text-2xl">Sigue a SEVENTEEN</h2>
-      <ul class="flex flex-wrap gap-6" data-seccion-redes="Sigue"></ul>
+    <section id="sigue" aria-labelledby="titulo-sigue" class="py-3 sm:py-6">
+      <h2 id="titulo-sigue" class="mb-2 px-4 font-display text-[1.05rem] uppercase tracking-wide sm:mb-4 sm:px-10 sm:text-2xl">Sigue a SEVENTEEN</h2>
+      <ul class="carril-chips" data-seccion-redes="Sigue"></ul>
     </section>
 
-    <section id="escucha" aria-labelledby="titulo-escucha" class="px-4 py-6 sm:px-10">
-      <h2 id="titulo-escucha" class="mb-4 font-display text-xl uppercase sm:text-2xl">Escucha a SEVENTEEN</h2>
-      <ul class="flex flex-wrap gap-6" data-seccion-redes="Escucha"></ul>
+    <section id="escucha" aria-labelledby="titulo-escucha" class="py-3 sm:py-6">
+      <h2 id="titulo-escucha" class="mb-2 px-4 font-display text-[1.05rem] uppercase tracking-wide sm:mb-4 sm:px-10 sm:text-2xl">Escucha a SEVENTEEN</h2>
+      <ul class="carril-chips" data-seccion-redes="Escucha"></ul>
     </section>
 
     <!-- Catálogo: las filas se crean desde la pestaña Enlaces (RF-21) -->
-    <div id="catalogo" aria-label="Catálogo de contenido" class="space-y-6 py-8"></div>
+    <div id="catalogo" aria-label="Catálogo de contenido" class="space-y-2 py-4 sm:space-y-6 sm:py-8"></div>
 
     <!-- Sugerencias y preguntas (RF-27, RF-28). Se conecta en la Fase 5. -->
     <section id="sugerencias" aria-labelledby="titulo-sugerencias" class="px-4 py-12 sm:px-10">
@@ -81,9 +81,9 @@
   <main id="detalle" hidden></main>
 
   <!-- Créditos y aviso legal (RF-29, RF-30). El aviso va fijo en el HTML (CU-10, 2a). -->
-  <footer class="border-t border-superficie-alta px-4 py-10 text-sm text-texto-suave sm:px-10">
+  <footer class="border-t border-superficie-alta px-4 pb-[max(2.5rem,env(safe-area-inset-bottom))] pt-10 text-sm text-texto-suave sm:px-10">
     <section id="creditos" aria-labelledby="titulo-creditos" class="mb-8">
-      <h2 id="titulo-creditos" class="mb-3 font-display text-lg uppercase text-texto">Agradecimientos &amp; créditos</h2>
+      <h2 id="titulo-creditos" class="mb-3 font-display text-base uppercase text-texto sm:text-lg">Agradecimientos &amp; créditos</h2>
       <p id="lista-creditos" class="leading-relaxed"></p>
     </section>
 
