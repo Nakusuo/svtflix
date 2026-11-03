@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 240" role="img" aria-label="Imagen no disponible">
+  <rect width="160" height="240" fill="#121218"/>
+  <g fill="none" stroke="#3a3946" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M62 104 l18 -14 l18 14 l-18 46 z"/>
+    <path d="M62 104 h36"/>
+  </g>
+  <text x="80" y="182" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#5d5b6b">Imagen no disponible</text>
+</svg>

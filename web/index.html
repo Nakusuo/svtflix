@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SVTFLIX en Español</title>
+  <meta name="description" content="Sitio fan que recopila contenido de SEVENTEEN subtitulado al español: música, predebut, Going Seventeen, conciertos y más.">
+  <meta name="theme-color" content="#08080b">
+
+  <!-- Al compartir el enlace en redes (RNF-16). Falta la imagen OG (Fase 6). -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="SVTFLIX en Español">
+  <meta property="og:description" content="Todo el contenido de SEVENTEEN subtitulado al español, en un solo lugar.">
+  <meta property="og:locale" content="es_ES">
+
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Montserrat:wght@400;600;700&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+
+  <script type="module" src="js/main.js"></script>
+</head>
+<body class="min-h-dvh">
+  <a href="#contenido" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded focus:bg-texto focus:px-4 focus:py-2 focus:text-fondo">
+    Saltar al contenido
+  </a>
+
+  <!-- Cabecera (RF-07) -->
+  <header id="cabecera" class="fixed inset-x-0 top-0 z-40 flex items-center justify-between px-4 py-3 transition-colors duration-300 sm:px-10">
+    <a href="#" class="leading-none" aria-label="SVTFLIX en Español, inicio">
+      <span class="block font-display text-2xl tracking-tight text-acento sm:text-3xl">SVTFLIX</span>
+      <span class="block text-[0.65rem] font-bold uppercase tracking-[0.3em] text-texto">en español</span>
+    </a>
+    <a id="enlace-carat" href="https://weverse.io/seventeen/feed" target="_blank" rel="noopener" class="text-sm font-semibold uppercase tracking-widest hover:text-rosa">
+      Carat
+    </a>
+  </header>
+
+  <main id="contenido">
+    <!-- Portada / hero (RF-08 a RF-11) -->
+    <section id="portada" aria-label="Lanzamiento destacado" class="relative flex min-h-[70vh] items-end overflow-hidden px-4 pb-12 sm:min-h-[85vh] sm:px-10">
+      <div class="esqueleto absolute inset-0 rounded-none" aria-hidden="true"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-fondo via-fondo/40 to-transparent" aria-hidden="true"></div>
+      <div class="relative max-w-xl">
+        <div class="esqueleto mb-4 h-14 w-64"></div>
+        <div class="esqueleto h-11 w-36"></div>
+      </div>
+    </section>
+
+    <!-- Top 13 (RF-12 a RF-19) -->
+    <section id="miembros" aria-labelledby="titulo-miembros" class="px-4 py-8 sm:px-10">
+      <h2 id="titulo-miembros" class="mb-4 font-display text-xl uppercase sm:text-2xl">Conoce a los 13 miembros</h2>
+      <div class="flex gap-4 overflow-hidden" data-esqueleto="tarjetas-verticales"></div>
+    </section>
+
+    <!-- Redes y plataformas (RF-20) -->
+    <section id="sigue" aria-labelledby="titulo-sigue" class="px-4 py-6 sm:px-10">
+      <h2 id="titulo-sigue" class="mb-4 font-display text-xl uppercase sm:text-2xl">Sigue a SEVENTEEN</h2>
+      <ul class="flex flex-wrap gap-6" data-seccion-redes="Sigue"></ul>
+    </section>
+
+    <section id="escucha" aria-labelledby="titulo-escucha" class="px-4 py-6 sm:px-10">
+      <h2 id="titulo-escucha" class="mb-4 font-display text-xl uppercase sm:text-2xl">Escucha a SEVENTEEN</h2>
+      <ul class="flex flex-wrap gap-6" data-seccion-redes="Escucha"></ul>
+    </section>
+
+    <!-- Catálogo: las filas se crean desde la pestaña Enlaces (RF-21) -->
+    <div id="catalogo" aria-label="Catálogo de contenido" class="space-y-8 px-4 py-8 sm:px-10"></div>
+
+    <!-- Sugerencias y preguntas (RF-27, RF-28). Se conecta en la Fase 5. -->
+    <section id="sugerencias" aria-labelledby="titulo-sugerencias" class="px-4 py-12 sm:px-10">
+      <h2 id="titulo-sugerencias" class="mb-2 font-display text-2xl uppercase sm:text-3xl">Sugerencias y preguntas</h2>
+      <p class="text-texto-suave">Muy pronto podrás dejarnos aquí tus comentarios, preguntas, reportes de links rotos o el contenido que quieres ver.</p>
+    </section>
+  </main>
+
+  <!-- Créditos y aviso legal (RF-29, RF-30). El aviso va fijo en el HTML (CU-10, 2a). -->
+  <footer class="border-t border-superficie-alta px-4 py-10 text-sm text-texto-suave sm:px-10">
+    <section id="creditos" aria-labelledby="titulo-creditos" class="mb-8">
+      <h2 id="titulo-creditos" class="mb-3 font-display text-lg uppercase text-texto">Agradecimientos &amp; créditos</h2>
+      <p id="lista-creditos" class="leading-relaxed"></p>
+    </section>
+
+    <p class="mb-4 max-w-3xl leading-relaxed">
+      SVTFLIX en Español es un sitio hecho por fans y no tiene relación oficial con SEVENTEEN ni con PLEDIS Entertainment.
+      Los links y videos no son nuestros: esta página solo recopila el contenido. Gracias a todas las personas que
+      traducen y subtitulan en su tiempo libre para que CARATs de todo el mundo puedan disfrutarlo. Sean siempre amables y pacientes con ellas.
+    </p>
+    <p>&copy; <span id="anio"></span> SVTFLIX en Español · por @SVTFLIX_ESP</p>
+  </footer>
+
+  <noscript>
+    <p class="fixed inset-x-0 bottom-0 bg-acento p-4 text-center font-semibold text-white">
+      SVTFLIX necesita JavaScript activado para cargar el contenido.
+    </p>
+  </noscript>
+</body>
+</html>

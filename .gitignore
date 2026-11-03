@@ -1,0 +1,6 @@
+node_modules/
+# CSS generado por Tailwind (lo compila Vercel en cada despliegue)
+web/css/
+.vercel/
+.DS_Store
+*.log
