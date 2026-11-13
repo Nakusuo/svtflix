@@ -108,7 +108,7 @@
 | RN-01 | La relación integrante ↔ Música/Programas se hace por la columna `Miembro`, comparada **normalizada**: sin puntos, espacios, tildes ni mayúsculas. Así `S.COUPS`, `s coups` y `Scoups` coinciden. Se recomienda usar el `ID` de `Miembros`. |
 | RN-02 | Se muestran los integrantes que haya en la hoja, ordenados por `Numero`. Si no son 13, se avisa en consola sin romper nada. |
 | RN-03 | Una fila del catálogo sin elementos válidos no se muestra. |
-| RN-04 | Un elemento sin `Titulo` o sin URL válida se ignora y se avisa en consola indicando pestaña y fila. |
+| RN-04 | Un elemento sin `Titulo` o sin URL válida se ignora y se avisa en consola indicando pestaña y fila. Excepción: si tiene `Titulo` y `URL_Video` está **vacía** (y, en `Enlaces`, tampoco tiene `Pagina`), es un elemento *pendiente* y se muestra como tarjeta «Próximamente», sin enlace. En `Contenido`, `Pagina` indica la página donde aparece, no un enlace, así que no cuenta (internamente se llama `madre`). En consola sale un único aviso con el total de pendientes. |
 | RN-05 | Las URLs que no son de YouTube en `Enlaces` se abren en pestaña nueva, no en el reproductor. |
 | RN-06 | Si hay varias filas en `Portada`, se usa la primera con `Activo` distinto de `No`. |
 

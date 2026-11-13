@@ -8,10 +8,10 @@ Cada `.csv` es **una pestaña** de la hoja. El modelo completo está en [docs/02
 | `Portada.csv` | 1 | Álbum destacado (DREAMSCAPE): logo, video de fondo, póster y botones |
 | `Miembros.csv` | 13 | Top 13: foto, clip de video, biografía, datos e Instagram |
 | `Musica.csv` | 15 | Música de cada integrante |
-| `Programas.csv` | 403 | Programas de cada integrante |
+| `Programas.csv` | 406 | Programas de cada integrante |
 | `Enlaces.csv` | 40 | Filas del inicio: Música, Predebut, Contenido Diverso, Going Seventeen, Proyecciones |
 | `Paginas.csv` | 15 | Páginas internas (Conciertos, Premiaciones, Variety…) |
-| `Contenido.csv` | 469 | Lo que hay dentro de cada página interna, con su sección (año, premiación…) |
+| `Contenido.csv` | 485 | Lo que hay dentro de cada página interna, con su sección (año, premiación…) |
 | `Redes.csv` | 12 | CARAT (Weverse), "Sigue a SEVENTEEN" y "Escucha a SEVENTEEN" |
 | `Creditos.csv` | 43 | Agradecimientos y créditos |
 
@@ -50,6 +50,7 @@ Admin edita la hoja ──► Google publica el CSV (tarda ~5 min) ──► cad
 | Añadir música o programas de un integrante | Fila en `Musica` o `Programas` con `Miembro` = su ID (`hoshi`, `the8`, `s-coups`…). |
 | Cambiar el álbum de la portada | Edita la fila de `Portada`. |
 | Ocultar algo sin borrarlo | `Activo` = `No`. |
+| Dar enlace a una tarjeta «Próximamente» | Pega la URL en su `URL_Video`. No hay que tocar nada más. |
 | Cambiar el orden | Cambia los números de `Orden` (y de `Orden_Categoria` para mover filas enteras). |
 
 ### Imágenes de contenido nuevo
@@ -58,6 +59,16 @@ Admin edita la hoja ──► Google publica el CSV (tarda ~5 min) ──► cad
 - Las imágenes que vinieron de Canva están dentro de la web (`img/…`). Para añadir ahí imágenes nuevas hay que subirlas al repositorio, y eso lo hace el equipo de desarrollo.
 
 ---
+
+## Añadido desde la hoja checklist (2026-11-12)
+
+La hoja checklist de secciones (casillas TRUE = va en la web) se comparó con estas pestañas. Se añadieron **solo los títulos que faltaban**, casi todos **con la URL pendiente** (`URL_Video` vacía):
+
+- `Contenido`: 15 en *Variety* y 1 en *Japón* (pendientes).
+- `Programas`: «Naraesik» de Joshua (pendiente) y «9lay Billard with U5» de S.COUPS y de Jeonghan, con la misma URL que ya tenía en *Entretenimiento*.
+
+Un elemento con título y sin URL se ve como tarjeta **«Próximamente»**: sin enlace, sin vista previa y sin opción de añadirlo a Mi lista. Cuando llegue la URL, basta con pegarla en la hoja.
+Lo que ya existía, aunque estuviera escrito de otra forma ("MVs" = "Videos Musicales", "Behind" = "Backstage"…), no se tocó.
 
 ## Revisar antes de publicar
 
