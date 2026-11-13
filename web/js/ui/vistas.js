@@ -74,7 +74,7 @@ export function vistaPagina(datos, id) {
   const p = (datos.paginas || []).find((x) => normalizar(x.pagina) === normalizar(id));
   if (!p) return el('div', { class: 'px-4 pt-28 sm:px-10' }, volver(), mensajeVacio('No encontramos esa página.'));
 
-  const items = (datos.contenido || []).filter((x) => normalizar(x.pagina) === normalizar(p.pagina));
+  const items = (datos.contenido || []).filter((x) => normalizar(x.madre) === normalizar(p.pagina));
   const secciones = [...agrupar(items, 'seccion')];
 
   return el('article', {},

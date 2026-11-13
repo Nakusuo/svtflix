@@ -26,7 +26,7 @@ export function crearIndice(datos) {
   for (const p of datos.paginas || []) agregar('pagina', p, p.titulo, p.descripcion || '');
   for (const e of datos.enlaces || []) if (!e.pagina) agregar('contenido', e, e.titulo, e.categoria || '');
   for (const c of datos.contenido || []) {
-    agregar('contenido', c, c.titulo, [paginas.get(plano(c.pagina))?.titulo, c.seccion].filter(Boolean).join(' · '));
+    agregar('contenido', c, c.titulo, [paginas.get(plano(c.madre))?.titulo, c.seccion].filter(Boolean).join(' · '));
   }
   for (const x of datos.musica || []) agregar('contenido', x, x.titulo, `Música · ${nombreDe(x.miembro)}`);
   for (const x of datos.programas || []) agregar('contenido', x, x.titulo, `Programas · ${nombreDe(x.miembro)}`);

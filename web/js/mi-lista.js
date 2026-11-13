@@ -9,7 +9,8 @@ let enMemoria = null;
 function leer() {
   if (enMemoria) return enMemoria;
   try {
-    enMemoria = JSON.parse(localStorage.getItem(CLAVE)) || [];
+    // Se descartan las entradas antiguas de Contenido guardadas como su página madre (tenían página y URL a la vez)
+    enMemoria = (JSON.parse(localStorage.getItem(CLAVE)) || []).filter((x) => !(x.pagina && x.url_video));
   } catch {
     enMemoria = [];
   }
@@ -40,7 +41,8 @@ export function alternarMiLista(item) {
     return false;
   }
   const { titulo, url_video, pagina, url_miniatura, plataforma } = item;
-  guardar([{ clave, titulo, url_video, pagina, url_miniatura, plataforma }, ...lista]);
+  // Con página interna no se guarda la URL: así "página y URL a la vez" solo puede ser una entrada antigua (ver leer)
+  guardar([{ clave, titulo, url_video: pagina ? '' : url_video, pagina, url_miniatura, plataforma }, ...lista]);
   return true;
 }
 

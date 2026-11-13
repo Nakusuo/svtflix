@@ -77,6 +77,9 @@ export async function cargarTodo() {
   const claves = Object.keys(PESTANAS);
   const resultados = await Promise.all(claves.map((c) => cargarPestana(c, PESTANAS[c])));
   const datos = Object.fromEntries(claves.map((c, i) => [c, resultados[i]]));
+  // En Contenido, la columna "Pagina" es la página madre, no un enlace a una página interna (como en Enlaces).
+  // Se renombra a "madre" para que una tarjeta de Contenido no se confunda con un enlace a su propia página.
+  datos.contenido = datos.contenido?.map(({ pagina, ...x }) => ({ ...x, madre: pagina })) ?? null;
   console.info('[SVTFLIX] Datos cargados:', Object.fromEntries(claves.map((c) => [c, datos[c]?.length ?? 'error'])));
   return datos;
 }
