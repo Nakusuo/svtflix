@@ -2,7 +2,7 @@
  * Piezas que se repiten: tarjeta de contenido, fila con carrusel y titular de sección.
  */
 import { IMAGEN_RESERVA } from '../config.js';
-import { normalizar } from '../datos.js';
+import { esPendiente, normalizar } from '../datos.js';
 import { el, urlSegura } from '../seguro.js';
 import { infoYouTube, miniaturaYouTube } from '../youtube.js';
 import { icono } from './iconos.js';
@@ -12,11 +12,31 @@ export function titular(texto, id) {
   return el('h2', { id, class: 'mb-1 font-display text-[1.05rem] uppercase tracking-wide sm:mb-2 sm:text-2xl', texto });
 }
 
+/** Título sobre un degradado, en la parte de abajo de la tarjeta. */
+const rotulo = (titulo) => el('div', { class: 'absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent px-2.5 pb-2 pt-8 sm:px-3 sm:pb-2.5 sm:pt-10' },
+  el('p', { class: 'line-clamp-2 text-[0.8rem] font-semibold leading-snug sm:text-sm', texto: titulo }));
+
+/** Tarjeta de un elemento sin URL todavía: se ve con su título, pero no se abre ni tiene vista previa. */
+function tarjetaPendiente(item, ancho) {
+  return el('div', { class: `relative block shrink-0 snap-start ${ancho} overflow-hidden rounded-md bg-superficie ring-1 ring-white/5` },
+    el('img', {
+      src: urlSegura(item.url_miniatura) || IMAGEN_RESERVA, alt: '', loading: 'lazy', decoding: 'async', width: 640, height: 360,
+      class: 'aspect-video w-full object-cover opacity-40 grayscale',
+    }),
+    el('span', {
+      class: 'absolute left-1.5 top-1.5 rounded-sm bg-rosa px-1.5 py-0.5 text-[0.6rem] font-bold uppercase tracking-wider text-fondo sm:left-2 sm:top-2 sm:text-[0.65rem]',
+      texto: 'Próximamente',
+    }),
+    rotulo(item.titulo));
+}
+
 /**
  * Tarjeta 16:9 para un video, lista, documento o página interna.
  * Por ahora abre YouTube en otra pestaña; el reproductor propio llega en la Fase 4.
+ * Si el elemento aún no tiene URL, devuelve una tarjeta "Próximamente" que no se puede abrir.
  */
 export function tarjeta(item, { ancho = 'w-[40vw] max-w-72 sm:w-72' } = {}) {
+  if (esPendiente(item)) return tarjetaPendiente(item, ancho);
   const url = urlSegura(item.url_video);
   const yt = infoYouTube(url);
   const miniatura = urlSegura(item.url_miniatura) || miniaturaYouTube(yt) || IMAGEN_RESERVA;
@@ -40,8 +60,7 @@ export function tarjeta(item, { ancho = 'w-[40vw] max-w-72 sm:w-72' } = {}) {
     class: 'absolute right-1.5 top-1.5 rounded-sm bg-black/70 px-1.5 py-0.5 text-[0.6rem] font-semibold uppercase tracking-wider text-texto-suave backdrop-blur sm:right-2 sm:top-2 sm:text-[0.65rem]',
     texto: etiqueta,
   }),
-  el('div', { class: 'absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent px-2.5 pb-2 pt-8 sm:px-3 sm:pb-2.5 sm:pt-10' },
-    el('p', { class: 'line-clamp-2 text-[0.8rem] font-semibold leading-snug sm:text-sm', texto: item.titulo || 'Sin título' })));
+  rotulo(item.titulo || 'Sin título'));
 
   registrarVistaPrevia(nodo, {
     titulo: item.titulo || 'Sin título',

@@ -21,6 +21,12 @@ export function normalizar(texto = '') {
     .replace(/[\s-]+/g, '_');
 }
 
+/**
+ * Elemento con título pero todavía sin URL ni página interna (la URL llegará después).
+ * Se muestra como "Próximamente"; en cuanto alguien pega la URL en la hoja, funciona como los demás.
+ */
+export const esPendiente = (item) => Boolean(item.titulo) && !item.pagina && !item.url_video;
+
 async function pedir(url) {
   const control = new AbortController();
   const reloj = setTimeout(() => control.abort(), TIEMPO_ESPERA_MS);
@@ -77,6 +83,12 @@ export async function cargarTodo() {
   const claves = Object.keys(PESTANAS);
   const resultados = await Promise.all(claves.map((c) => cargarPestana(c, PESTANAS[c])));
   const datos = Object.fromEntries(claves.map((c, i) => [c, resultados[i]]));
+  // En Contenido, la columna "Pagina" es la página madre, no un enlace a una página interna (como en Enlaces).
+  // Se renombra a "madre" para que una tarjeta de Contenido no se confunda con un enlace a su propia página.
+  datos.contenido = datos.contenido?.map(({ pagina, ...x }) => ({ ...x, madre: pagina })) ?? null;
   console.info('[SVTFLIX] Datos cargados:', Object.fromEntries(claves.map((c) => [c, datos[c]?.length ?? 'error'])));
+  // Un solo aviso resumido, no uno por fila
+  const pendientes = ['enlaces', 'contenido', 'musica', 'programas'].flatMap((c) => datos[c] || []).filter(esPendiente).length;
+  if (pendientes) console.info(`[SVTFLIX] ${pendientes} elementos sin URL todavía: se muestran como «Próximamente».`);
   return datos;
 }
